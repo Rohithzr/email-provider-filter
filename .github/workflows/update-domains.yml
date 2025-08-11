@@ -38,8 +38,13 @@ jobs:
         git add output/
         if git diff --staged --quiet; then
           echo "changed=false" >> $GITHUB_OUTPUT
+          echo "No changes detected in output files"
         else
           echo "changed=true" >> $GITHUB_OUTPUT
+          echo "Changes detected in output files"
+          # Set tag name for release
+          echo "tag_name=v$(date +'%Y%m%d-%H%M')" >> $GITHUB_OUTPUT
+          echo "release_name=Email Domains $(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
         fi
         
     - name: Commit and push changes
@@ -54,8 +59,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: v$(date +'%Y%m%d')
-        release_name: Email Domains $(date +'%Y-%m-%d')
+        tag_name: ${{ steps.changes.outputs.tag_name }}
+        release_name: ${{ steps.changes.outputs.release_name }}
         body: |
           Daily update of email domain classifications
           
