@@ -1,0 +1,59 @@
+name: Data Contribution
+description: Suggest new domains or data sources to include
+title: "[Data]: "
+labels: ["data", "enhancement"]
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Help us improve our dataset! Share new domains or sources you've found.
+
+  - type: dropdown
+    id: type
+    attributes:
+      label: Contribution Type
+      description: What are you contributing?
+      options:
+        - New disposable email domains
+        - New free email providers
+        - New paid personal providers
+        - New data source (URL)
+        - Incorrect categorization fix
+    validations:
+      required: true
+
+  - type: textarea
+    id: domains
+    attributes:
+      label: Domain List
+      description: List the domains you want to add (one per line)
+      placeholder: |
+        example-temp-mail.com
+        another-disposable.net
+      
+  - type: textarea
+    id: source-url
+    attributes:
+      label: Data Source URL (if applicable)
+      description: If suggesting a new data source, provide the URL
+      placeholder: https://raw.githubusercontent.com/user/repo/main/domains.txt
+
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence/Verification
+      description: How did you verify these domains? (screenshots, testing, etc.)
+      placeholder: I tested these domains and confirmed they are disposable...
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: verification
+    attributes:
+      label: Verification
+      description: Please confirm
+      options:
+        - label: I have tested these domains personally
+        - label: I have verified the source is reliable
+        - label: I understand this data will be publicly available

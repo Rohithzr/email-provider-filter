@@ -1,0 +1,56 @@
+name: Bug Report
+description: Report an issue with domain categorization or the data
+title: "[Bug]: "
+labels: ["bug"]
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug! We appreciate your help in improving this project.
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: A clear description of the bug
+      placeholder: Tell us what you see!
+    validations:
+      required: true
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Issue Category
+      description: What type of issue is this?
+      options:
+        - Domain incorrectly categorized
+        - Missing domain
+        - Script/code error
+        - Documentation issue
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: domain-examples
+    attributes:
+      label: Domain Examples (if applicable)
+      description: List specific domains that are incorrectly categorized
+      placeholder: |
+        example.com - should be disposable but marked as free
+        another.com - missing from lists entirely
+      
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: What should happen instead?
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional context
+      description: Any other context about the problem here
