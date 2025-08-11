@@ -1,0 +1,23 @@
+# Our curated list of disposable email domains
+# Format: domain.com
+
+emailhook.site
+webhook.site
+requestbin.net
+tempmail.org
+10minutemail.com
+guerrillamail.com
+mailinator.com
+yopmail.com
+throwaway.email
+temp-mail.org
+maildrop.cc
+getnada.com
+sharklasers.com
+grr.la
+guerrillamailblock.com
+pokemail.net
+spam4.me
+trbvm.com
+kurzepost.de
+byom.de

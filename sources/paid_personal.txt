@@ -1,0 +1,25 @@
+# Paid personal email providers
+# Format: domain.com
+
+protonmail.com
+proton.me
+fastmail.com
+fastmail.fm
+hey.com
+tutanota.com
+tutanota.de
+tuta.io
+mailfence.com
+posteo.de
+posteo.net
+posteo.org
+runbox.com
+kolabnow.com
+mailbox.org
+soverin.net
+ctemplar.com
+startmail.com
+countermail.com
+riseup.net
+disroot.org
+autistici.org

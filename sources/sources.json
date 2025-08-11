@@ -1,0 +1,34 @@
+{
+  "disposable": [
+    {
+      "name": "disposable-email-domains",
+      "url": "https://raw.githubusercontent.com/disposable-email-domains/disposable-email-domains/refs/heads/main/disposable_email_blocklist.conf",
+      "description": "Community maintained list of disposable email domains",
+      "format": "txt",
+      "count": 4556,
+      "updated": "daily"
+    }
+  ],
+  "free_paid": [
+    {
+      "name": "all-email-providers",
+      "url": "https://gist.githubusercontent.com/ammarshah/f5c2624d767f91a7cbdc4e54db8dd0bf/raw/660fd949eba09c0b86574d9d3aa0f2137161fc7c/all_email_provider_domains.txt",
+      "description": "Mixed list of email providers (free/paid) - needs filtering",
+      "format": "txt",
+      "count": 6556,
+      "notes": "Contains false positives and duplicates from disposable list"
+    }
+  ],
+  "custom": [
+    {
+      "name": "custom-disposable",
+      "file": "custom_disposable.txt",
+      "description": "Our curated list of disposable email domains"
+    },
+    {
+      "name": "paid-personal",
+      "file": "paid_personal.txt", 
+      "description": "Paid personal email providers"
+    }
+  ]
+}

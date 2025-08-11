@@ -1,0 +1,29 @@
+# Business domains that should be allowed
+# Format: domain.com
+# These are legitimate business domains that might appear in blocklists
+
+# Major tech companies (business domains)
+google.com
+microsoft.com
+apple.com
+amazon.com
+facebook.com
+meta.com
+twitter.com
+linkedin.com
+salesforce.com
+oracle.com
+ibm.com
+adobe.com
+netflix.com
+uber.com
+airbnb.com
+stripe.com
+shopify.com
+atlassian.com
+slack.com
+zoom.us
+dropbox.com
+
+# Common business hosting patterns that should be allowed
+# (These will need manual review of the candidates)
