@@ -39,28 +39,56 @@ def categorize_domains() -> Tuple[Set[str], Set[str], Set[str]]:
     with open('sources/sources.json', 'r') as f:
         sources = json.load(f)
     
-    # Download and load disposable domains
-    disposable_url = sources['disposable'][0]['url']
-    download_source(disposable_url, 'temp/disposable.txt')
-    disposable_domains = load_domains_from_file('temp/disposable.txt')
+    # Download and combine all disposable domain sources
+    print("Loading disposable domain sources...")
+    disposable_domains = set()
+    
+    for i, source in enumerate(sources['disposable']):
+        temp_file = f'temp/disposable_{i}.txt'
+        download_source(source['url'], temp_file)
+        domains = load_domains_from_file(temp_file)
+        disposable_domains.update(domains)
+        print(f"  - {source['name']}: {len(domains):,} domains")
     
     # Add our custom disposable domains
     custom_disposable = load_domains_from_file('sources/custom_disposable.txt')
     disposable_domains.update(custom_disposable)
+    print(f"  - custom disposable: {len(custom_disposable)} domains")
+    
+    print(f"Total disposable domains (after deduplication): {len(disposable_domains):,}")
     
     # Load paid personal domains
     paid_personal_domains = load_domains_from_file('sources/paid_personal.txt')
+    print(f"Paid personal domains: {len(paid_personal_domains)} domains")
     
-    # Download all provider domains
-    all_providers_url = sources['free_paid'][0]['url']
-    download_source(all_providers_url, 'temp/all_providers.txt')
-    all_provider_domains = load_domains_from_file('temp/all_providers.txt')
+    # Download and combine all free/paid provider sources
+    print("Loading free/paid email provider sources...")
+    all_provider_domains = set()
+    
+    for i, source in enumerate(sources['free_paid']):
+        temp_file = f'temp/free_paid_{i}.txt'
+        download_source(source['url'], temp_file)
+        domains = load_domains_from_file(temp_file)
+        all_provider_domains.update(domains)
+        print(f"  - {source['name']}: {len(domains):,} domains")
+    
+    print(f"Total free/paid domains (after deduplication): {len(all_provider_domains):,}")
     
     # Load allowlist
     allowlist = load_domains_from_file('sources/allowlist.txt')
+    print(f"Allowlist domains: {len(allowlist)} domains")
     
     # Remove disposable, paid personal, and allowlisted domains from all_providers
+    print("Categorizing domains...")
     free_domains = all_provider_domains - disposable_domains - paid_personal_domains - allowlist
+    
+    # Remove any paid personal domains that might be in disposable lists (using allowlist logic)
+    disposable_domains -= allowlist
+    
+    print(f"Final categorization:")
+    print(f"  - Disposable: {len(disposable_domains):,} domains")
+    print(f"  - Free: {len(free_domains):,} domains") 
+    print(f"  - Paid Personal: {len(paid_personal_domains)} domains")
     
     return disposable_domains, free_domains, paid_personal_domains
 

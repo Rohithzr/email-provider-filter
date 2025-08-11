@@ -7,6 +7,22 @@
       "format": "txt",
       "count": 4556,
       "updated": "daily"
+    },
+    {
+      "name": "disposable-massive",
+      "url": "https://raw.githubusercontent.com/disposable/disposable-email-domains/refs/heads/master/domains.txt",
+      "description": "Massive auto-generated disposable email domains list",
+      "format": "txt", 
+      "count": 71532,
+      "updated": "every 24 hours"
+    },
+    {
+      "name": "unkn0w-disposable",
+      "url": "https://raw.githubusercontent.com/unkn0w/disposable-email-domain-list/main/domains.txt",
+      "description": "Newsletter spam prevention focused disposable domains",
+      "format": "txt",
+      "count": "~5000",
+      "updated": "regularly"
     }
   ],
   "free_paid": [
@@ -17,6 +33,14 @@
       "format": "txt",
       "count": 6556,
       "notes": "Contains false positives and duplicates from disposable list"
+    },
+    {
+      "name": "ihmpavel-free-domains",
+      "url": "https://raw.githubusercontent.com/ihmpavel/free-email-domains-list/master/data/data.txt",
+      "description": "Comprehensive free email domains list for business email detection",
+      "format": "txt",
+      "count": 9000,
+      "updated": "weekly"
     }
   ],
   "custom": [

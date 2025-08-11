@@ -72,3 +72,31 @@ jobs:
           - `paid_personal.txt` - Paid personal email provider domains only
         draft: false
         prerelease: false
+        
+    - name: Job Summary
+      if: steps.changes.outputs.changed == 'true'
+      run: |
+        echo "### Email Domain Lists Updated! 🎉" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "**Dataset Statistics:**" >> $GITHUB_STEP_SUMMARY
+        echo "- **Total Domains:** $(cat output/email_domains.json | jq -r '.metadata.total_domains') domains" >> $GITHUB_STEP_SUMMARY
+        echo "- **Disposable:** $(cat output/email_domains.json | jq -r '.metadata.categories.disposable') domains" >> $GITHUB_STEP_SUMMARY  
+        echo "- **Free:** $(cat output/email_domains.json | jq -r '.metadata.categories.free') domains" >> $GITHUB_STEP_SUMMARY
+        echo "- **Paid Personal:** $(cat output/email_domains.json | jq -r '.metadata.categories.paid_personal') domains" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "**Generated Files:**" >> $GITHUB_STEP_SUMMARY
+        echo "- [\`email_domains.json\`](https://github.com/Rohithzr/email-provider-filter/blob/main/output/email_domains.json) - Complete dataset in JSON format" >> $GITHUB_STEP_SUMMARY
+        echo "- [\`email_domains.csv\`](https://github.com/Rohithzr/email-provider-filter/blob/main/output/email_domains.csv) - Complete dataset in CSV format" >> $GITHUB_STEP_SUMMARY
+        echo "- [\`disposable.txt\`](https://github.com/Rohithzr/email-provider-filter/blob/main/output/disposable.txt) - Disposable email domains only" >> $GITHUB_STEP_SUMMARY
+        echo "- [\`free.txt\`](https://github.com/Rohithzr/email-provider-filter/blob/main/output/free.txt) - Free email provider domains only" >> $GITHUB_STEP_SUMMARY
+        echo "- [\`paid_personal.txt\`](https://github.com/Rohithzr/email-provider-filter/blob/main/output/paid_personal.txt) - Paid personal email provider domains only" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "**Release:** [\`${{ steps.changes.outputs.tag_name }}\`](https://github.com/Rohithzr/email-provider-filter/releases/tag/${{ steps.changes.outputs.tag_name }})" >> $GITHUB_STEP_SUMMARY
+        
+    - name: No Changes Summary
+      if: steps.changes.outputs.changed == 'false'
+      run: |
+        echo "### No Changes Detected ✨" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "All domain sources were checked but no updates were found." >> $GITHUB_STEP_SUMMARY
+        echo "The existing dataset remains current." >> $GITHUB_STEP_SUMMARY

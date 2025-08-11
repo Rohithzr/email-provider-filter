@@ -25,5 +25,8 @@ slack.com
 zoom.us
 dropbox.com
 
+# Privacy-focused legitimate services that may appear in disposable lists
+riseup.net
+
 # Common business hosting patterns that should be allowed
 # (These will need manual review of the candidates)
