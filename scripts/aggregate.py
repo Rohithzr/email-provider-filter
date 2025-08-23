@@ -97,10 +97,41 @@ def generate_outputs(disposable: Set[str], free: Set[str], paid_personal: Set[st
     
     os.makedirs('output', exist_ok=True)
     
+    # Prepare new domain data for comparison
+    new_domains = {
+        'disposable': sorted(list(disposable)),
+        'free': sorted(list(free)),
+        'paid_personal': sorted(list(paid_personal))
+    }
+    
+    # Check if domain content has actually changed
+    existing_timestamp = None
+    content_changed = True  # Default to True if no existing file
+    
+    if os.path.exists('output/email_domains.json'):
+        try:
+            with open('output/email_domains.json', 'r') as f:
+                existing_data = json.load(f)
+                existing_domains = existing_data.get('domains', {})
+                existing_timestamp = existing_data.get('metadata', {}).get('generated')
+                
+                # Compare domain content (ignore metadata)
+                content_changed = existing_domains != new_domains
+        except (json.JSONDecodeError, KeyError):
+            # If we can't parse existing file, assume content changed
+            content_changed = True
+    
+    # Use existing timestamp if content hasn't changed, otherwise use current time
+    if content_changed or existing_timestamp is None:
+        from datetime import datetime, timezone
+        timestamp = datetime.now(timezone.utc).isoformat()
+    else:
+        timestamp = existing_timestamp
+    
     # Combined data structure
     data = {
         'metadata': {
-            'generated': datetime.utcnow().isoformat() + 'Z',
+            'generated': timestamp,
             'total_domains': len(disposable) + len(free) + len(paid_personal),
             'categories': {
                 'disposable': len(disposable),
@@ -108,11 +139,7 @@ def generate_outputs(disposable: Set[str], free: Set[str], paid_personal: Set[st
                 'paid_personal': len(paid_personal)
             }
         },
-        'domains': {
-            'disposable': sorted(list(disposable)),
-            'free': sorted(list(free)),
-            'paid_personal': sorted(list(paid_personal))
-        }
+        'domains': new_domains
     }
     
     # JSON output (most compact)
@@ -150,6 +177,11 @@ def generate_outputs(disposable: Set[str], free: Set[str], paid_personal: Set[st
     print(f"  - Free: {len(free)} domains") 
     print(f"  - Paid Personal: {len(paid_personal)} domains")
     print(f"  - Total: {len(disposable) + len(free) + len(paid_personal)} domains")
+    
+    if content_changed:
+        print("  ✓ Domain content has changed - timestamp updated")
+    else:
+        print("  ✓ Domain content unchanged - timestamp preserved")
 
 def main():
     print("Starting email domain aggregation...")
