@@ -1,3 +1,4 @@
+.tooltip.bottom
 0-00.usa.cc
 0-30-24.com
 0-attorney.com
@@ -1181,7 +1182,6 @@
 24fm.org
 24gmail.com
 24hbanner.com
-24hhost.cc
 24hinbox.com
 24hotesl.com
 24hour.email
@@ -2831,6 +2831,7 @@
 6brmwv.ml
 6brmwv.tk
 6cq9epnn.edu.pl
+6dy.store
 6ed9cit4qpxrcngbq.cf
 6ed9cit4qpxrcngbq.ga
 6ed9cit4qpxrcngbq.gq
@@ -3818,6 +3819,7 @@ a.b.c.emlpro.com
 a.b.c.emltmp.com
 a.b.c.laste.ml
 a.barbiedreamhouse.club
+a.bc
 a.beardtrimmer.club
 a.bestwrinklecreamnow.com
 a.betr.co
@@ -4506,6 +4508,7 @@ adacalabuig.com
 adachiu.me
 adacplastics.com
 adadad.com
+adadad.uk
 adadass.cf
 adadass.ga
 adadass.gq
@@ -8737,6 +8740,7 @@ backmail.ml
 backpackestore.com
 backpainadvice.info
 backtobasicsbluegrass.com
+backtotopbutton.style.display
 backva.com
 backwis.com
 backyardduty.com
@@ -8826,6 +8830,7 @@ bahoo.biz.st
 bahv5.anonbox.net
 bai47.com
 baicmotormyanmar.com
+baidoxe.com
 baidubaidu123123.info
 baikal-autotravel.ru
 bailbondsdirect.com
@@ -9647,7 +9652,6 @@ berirabotay.ru
 beritahajidanumroh.com
 beritaproperti.com
 berjalansasuiquasd.codes
-berkahfb.com
 berkahjaran.xyz
 berkatrb.com
 berkeleyif.com
@@ -10844,7 +10848,6 @@ blqthexqfmmcsjc6hy.tk
 blquw.anonbox.net
 blssmly.com
 blst.gov
-blsyq.anonbox.net
 bltiwd.com
 blue-mail.org
 blue-rain.org
@@ -11453,7 +11456,6 @@ bossman.chat
 bossmanjack.lol
 bossmanjack.shop
 bossmanjack.store
-bossmanjack.xyz
 bosterpremium.com
 bostonhydraulic.com
 bostonplanet.com
@@ -12090,7 +12092,6 @@ buday.htsail.pl
 budaya-tionghoa.com
 budayationghoa.com
 budded.site
-buddyfly.top
 budemeadows.com
 budgermile.rest
 budgetblankets.com
@@ -12660,6 +12661,7 @@ bzfads.space
 bzfr7.anonbox.net
 bzg.emlpro.com
 bzgiv.anonbox.net
+bzhpc.anonbox.net
 bzhzd.anonbox.net
 bzidohaoc3k.cf
 bzidohaoc3k.ga
@@ -14919,6 +14921,7 @@ clonemoi.com
 clonemoi.tk
 clonenbr.site
 clonenuoi2024.top
+clonetop1.shop
 clonetrust.com
 clonevietmail.click
 clonevippro.site
@@ -15513,7 +15516,6 @@ componentartscstamp.store
 compoundtown.com
 comprabula.pt
 comprar-com-desconto.com
-comprarcapcut.shop
 compraresteroides.xyz
 comprarfarmacia.site
 comprehensivesearchinitiatives.com
@@ -15728,10 +15730,12 @@ copley.entadsl.com
 copot.info
 copperemail.com
 copyandart.de
+copybtn.innerhtml
 copycashvalve.com
 copyhome.win
 copymanprintshop.com
 copyright-gratuit.net
+copytitle.textcontent
 coqh.com
 coqmail.com
 cora.marketdoors.info
@@ -16368,7 +16372,6 @@ cuedingsi.cf
 cuelmail.info
 cuendita.com
 cuenmex.com
-cuentaspelis.top
 cuentaspremium-es.xyz
 cuerohosp.org
 cufy.yomail.info
@@ -17897,6 +17900,7 @@ despam.it
 despammed.com
 destinationsmoke.com
 destive.world
+destroylink.nextsibling.textcontent
 destructiveblog.com
 destweb.com
 deszn1d5wl8iv0q.cf
@@ -19028,6 +19032,7 @@ doctovc.com
 doctroscares.shop
 doctroscares.world
 docu.me
+document.cookie
 docusign-enterprise.com
 docv.site
 docw.site
@@ -19172,7 +19177,6 @@ domainscan.ro
 domainseoforum.com
 domainsone.org
 domainssssssss.services
-domainstream.org
 domainwizard.host
 domainwizard.win
 domajabro.ga
@@ -19935,6 +19939,7 @@ dumpmail.com
 dumpmail.de
 dumpyemail.com
 duncancorp.usa.cc
+duncansanyi.cc
 dundee.city
 dundeeusedcars.co.uk
 dundo.tk
@@ -20115,6 +20120,7 @@ dy7fpcmwck.gq
 dy7fpcmwck.ml
 dy7fpcmwck.tk
 dyceroprojects.com
+dyclsr.xyz
 dye.emlhub.com
 dygovil.com
 dyi.com
@@ -20445,7 +20451,6 @@ easydinnerrecipes.org
 easydirectory.tk
 easyemail.info
 easyfbcommissions.com
-easyfundplan.com
 easygamingbd.com
 easygbd.cn
 easygbd.com
@@ -22403,6 +22408,7 @@ etopys.com
 etotvibor.ru
 etovar.net.ua
 etoymail.com
+etramay.com
 etranquil.com
 etranquil.net
 etranquil.org
@@ -23878,7 +23884,6 @@ fhm.emlhub.com
 fhm.emltmp.com
 fhn.freeml.net
 fhollandc.com
-fhoxe.works
 fhpfhp.fr.nf
 fhqtmsk.pl
 fhs.spymail.one
@@ -24772,7 +24777,6 @@ for1mail.tk
 for4.com
 for4mail.com
 foragentsonky.com
-forapps.shop
 foraro.com
 forcelons.xyz
 forcrack.com
@@ -26634,6 +26638,7 @@ gggo.emltmp.com
 gggt.de
 gghb.freeml.net
 gghfjjgt.com
+gglorytogod.com
 ggmaail.com
 ggmail.biz.st
 ggmail.cloud
@@ -26709,7 +26714,6 @@ giaminhgmc.top
 giaminhmmo.top
 gianes.com
 giangcho2000.asia
-giangholang.xyz
 gianna1121.club
 giantmail.de
 giantwebs2010.info
@@ -28413,6 +28417,7 @@ gzek.emlpro.com
 gzesiek84bb.pl
 gzk.mimimail.me
 gzk2sjhj9.pl
+gzley.site
 gzo.laste.ml
 gzq.emlhub.com
 gzr.spymail.one
@@ -29635,6 +29640,7 @@ hissfuse.com
 histhisc.shop
 historicstalphonsus.org
 historictheology.com
+historylink.nextsibling.textcontent
 historyship.ru
 hisukamie.com
 hit.cowsnbullz.com
@@ -32124,6 +32130,7 @@ inox.org.pl
 inpowiki.xyz
 inppares.org.pe
 inpsur.com
+inputrect.width
 inpwa.com
 inrelations.ru
 inrim.cf
@@ -32896,7 +32903,6 @@ ivuhmail.com
 ivx.emltmp.com
 ivyandmarj.com
 ivybotreviews.net
-ivyglam.shop
 ivyplayers.com
 ivysheirlooms.net
 ivzapp.com
@@ -33299,6 +33305,7 @@ jarilusua.com
 jaringan.design
 jarlo-london.com
 jarringsafri.biz
+jarsdigital.sbs
 jarumpoker1.com
 jarxs-vpn.ml
 jasabacklinkmurah.com
@@ -33966,7 +33973,6 @@ jonotaegi.net
 jonotaegi.org
 jonrepoza.ml
 jonrichardsalon.com
-jonsens.cc
 jonsjav.cc
 jontra.com
 jonuman.com
@@ -34558,7 +34564,6 @@ kabiny-prysznicowe.ovh
 kabo-verde-nedv.ru
 kabulational.xyz
 kacakbudalngaji.com
-kacer.store
 kaciekenya.webmailious.top
 kacose.xyz
 kacwarriors.org
@@ -35685,6 +35690,7 @@ kirchdicka.ga
 kirchdicka.gq
 kirchdicka.ml
 kirklandcounselingcenter.com
+kironek.store
 kirpikcafe.com
 kirrus.com
 kirurgkliniken.nu
@@ -36348,7 +36354,6 @@ ksadkscn.com
 ksadrc.com
 ksb.emlpro.com
 kscommunication.com
-ksdssd.cc
 kserokopiarki-gliwice.com.pl
 kserokopiarki.pl
 ksframem.com
@@ -36877,7 +36882,6 @@ lahta9qru6rgd.ga
 lahta9qru6rgd.gq
 lahta9qru6rgd.ml
 lahta9qru6rgd.tk
-laicai8.sbs
 laika999.ml
 laikacyber.cf
 laikacyber.ga
@@ -36988,7 +36992,6 @@ lanipe.com
 lankew.com
 lantofe.ga
 lanxi8.com
-laocaishen.cc
 laoctarine.store
 laoeq.com
 laoho.com
@@ -38099,6 +38102,7 @@ lixo.loxot.eu
 liyaxiu.com
 liybt.live
 liza.freeml.net
+lizadjp.news
 lizardrich.com
 lizenzzentrale.com
 lizery.com
@@ -38253,6 +38257,7 @@ loadednicetext.site
 loadedrarebooks.site
 loadfreshstuff.site
 loadfreshtexts.site
+loadingrow.innerhtml
 loadingsite.info
 loadingya.com
 loadlibbooks.site
@@ -38312,10 +38317,6 @@ locantowsite.club
 locarlsts.com
 located6j.com
 locateme10.com
-location.hash
-location.href.length
-location.pathname
-location.search
 locationans.ru
 locationlocationlocation.eu
 locawin.com
@@ -40404,7 +40405,6 @@ mailinux.me
 mailisia.com
 mailismagic.com
 mailita.tk
-mailive.click
 mailivw.com
 mailj.tk
 mailjean.com
@@ -41202,7 +41202,6 @@ marattok.com
 marbau-hydro.pl
 marbleorbmail.bid
 marbuloh.com
-marc93.qpon
 marcb.com
 marcbymarcjacobsjapan.com
 marchcats.com
@@ -41295,7 +41294,6 @@ marriagedate.net
 marriedchat.co.uk
 marrocomail.gdn
 marromeunationalreserve.com
-marrytodo.de
 marryznakomstv.ru
 mars.blatnet.com
 mars.martinandgang.com
@@ -41491,6 +41489,7 @@ maxflo.com
 maxgolive.vn
 maxgtrend.ru
 maximail.fyi
+maximail.store
 maximail.vip
 maximalbonus.de
 maximeblack.com
@@ -43012,6 +43011,7 @@ modaborsechane2.com
 modaborseguccioutletonline.com
 modaborseprezzi.com
 modachane1borsee.com
+modal.dataset.showmodal
 modapeuterey2012.com
 modapeutereyuomo.com
 modapk.fun
@@ -43308,7 +43308,6 @@ moreablle.com
 moreawesomethanyou.com
 morecoolstuff.net
 morefunmart.com
-moreglass.vn
 moregrafftsfrou.com
 morekiss.online
 moremobileprivacy.com
@@ -44152,7 +44151,6 @@ mycatbook.site
 mycattext.site
 myccscollection.com
 mycellphonespysoft.info
-mycertnote.com
 mycharming.club
 mycharming.live
 mycharming.online
@@ -45608,7 +45606,6 @@ ngk.laste.ml
 ngo1.com
 ngochuyen.xyz
 ngocminhtv.com
-ngocok.cloud
 ngocsita.com
 ngolearning.info
 ngontol.com
@@ -45793,7 +45790,6 @@ nightfood.studio
 nightfunmore.online.ctu.edu.gr
 nightmedia.cf
 nightorb.com
-nihennaisi188.cc
 nihongames.pl
 niibb.com
 niickel.us
@@ -46544,7 +46540,6 @@ nthrw.com
 ntilboimbyt.ga
 ntilsibi.ga
 ntirrirbgf.pl
-ntkdev.click
 ntkworld.com
 ntldev.sbs
 ntlhelp.net
@@ -46556,6 +46551,7 @@ ntllma3vn6qz.tk
 ntlshopus.com
 ntlword.com
 ntlworkd.com
+ntp.homes
 ntrg.laste.ml
 ntschools.com
 ntservices.xyz
@@ -49512,6 +49508,7 @@ perkypoll.org
 perl.mil
 perm-master.ru
 permanentans.ru
+permanenttooltip.style.left
 permcourier.com
 permkurort.ru
 perpetualsecurities.com
@@ -50295,7 +50292,6 @@ poczxneolinkc.info
 podam.pl
 podarbuke.ru
 podatnik.info
-podeprom.es
 poderosa.com
 podgladaczgoogle.pl
 podhub.email
@@ -50549,6 +50545,7 @@ pordiosw.com
 pordpopogame.com
 poreglot.ru
 porevoorevo.co.cc
+porhantek.shop
 poribikers.tk
 porilo.com
 porjoton.com
@@ -50933,6 +50930,7 @@ premiapp.com
 premierpainandwellness.com
 premiertrafficservices.com
 premigu.co
+premilo.cloud
 premipay.io
 premium-emailos.com
 premium-mail.fr
@@ -53045,6 +53043,7 @@ rastenivod.ru
 rastrofiel.com
 ratcher5648.gq
 ratcher5648.ml
+rate98.shop
 ratedane.com
 ratel.org
 rateliso.com
@@ -53550,6 +53549,9 @@ refo.site
 refp.site
 refpiwork.ga
 refr.site
+refreshbutton.disabled
+refreshbutton.innerhtml
+refreshtext.textcontent
 refsb.site
 refsc.site
 refse.site
@@ -53579,6 +53581,7 @@ refy.site
 refz.site
 reg.xmlhgyjx.com
 reg19.ml
+regacc.shop
 regadub.ru
 regaloregamicudz.org
 regalos.store
@@ -53827,6 +53830,7 @@ reqaxv.com
 reqdocs.com
 requanague.site
 requestbin.net
+requestbody.domain
 requestmeds.com
 reqz.spymail.one
 rerajut.com
@@ -53874,6 +53878,7 @@ resortmapprinters.com
 respectabrew.com
 respectabrew.net
 respekus.com
+response.message
 responsive.co.il
 resself.site
 ressources-solidaires.info
@@ -54460,6 +54465,7 @@ rodneystudios.com
 rodroderedri.com
 rodsupersale.com
 rodtookjing.com
+roducts.us
 rodzinnie.org
 roewe.cf
 roewe.ga
@@ -55720,6 +55726,7 @@ sandypil767676.store
 sandyteo.com
 sanering-stockholm.nu
 sanfinder.com
+sanfnge.run
 sanfnges.cc
 sanfrancisco49ersproteamjerseys.com
 sanfranflowersinhair.com
@@ -56425,7 +56432,6 @@ selectlaundry.com
 selectraindustries.com
 selectyourinfo.com
 selehom.shop
-selenezero.com
 selenmoaszs.store
 seleramakngah.com
 selfarticle.com
@@ -56501,7 +56507,6 @@ sempuranadi.tk
 semsei.co.uk
 semusimbersama.online
 semut-kecil.com
-semutireng.com
 semutkecil.com
 sen.yomail.info
 senakelem.online
@@ -57175,7 +57180,6 @@ shopcelinejapan.com
 shopclone68vn.top
 shopcloneus.com
 shopcobe.com
-shopcreative.cc
 shopdigital.info
 shopdoker.ru
 shopdonna.com
@@ -58407,7 +58411,6 @@ songlyricser.com
 songosng.com
 songpaste.com
 songpong.net
-songsan.business
 songsblog.info
 songshnagu.com
 songshnagual.com
@@ -58810,7 +58813,6 @@ spikeworth.com
 spikeysix.site
 spikio.com
 spin.net
-spin1771.top
 spinacz99.ru
 spindl-e.com
 spinefruit.com
@@ -60643,6 +60645,7 @@ tampaquote.com
 tampasurveys.com
 tampatailor.com
 tampicobrush.org
+tams.codes
 tamsholdings.com
 tamttts.com
 tamuhost.me
@@ -63008,7 +63011,6 @@ touranya.com
 tourbalitravel.com
 tourcatalyst.com
 tourcc.com
-tourgogogo.com
 touristravel.ru
 tourmalinehairdryerz.com
 tournament-challenge.com
@@ -63137,6 +63139,7 @@ tqosi.com
 tqpx.yomail.info
 tqqun.com
 tqwagwknnm.pl
+tr.unread
 tr23.com
 tr2k.cf
 tr2k.ga
@@ -63721,7 +63724,6 @@ tugo.ga
 tugurywag.life
 tuhsuhtzk.pl
 tuimail.ml
-tujiaoshou.com
 tujimastr09lioj.ml
 tukang.codes
 tukieai.com
@@ -64290,6 +64292,7 @@ ud.spymail.one
 udaanexpress.tech
 udbaccount.com
 udderl.site
+uddyokta.com
 udec.edu
 udemail.com
 udid.com
@@ -64696,6 +64699,7 @@ unaux.com
 unbanq.com
 unbiex.com
 unblockedgamesrun.com
+uncensor.me
 uncensored.rf.gd
 uncensoredsurvival.com
 unchartedsw.com
@@ -64980,7 +64984,6 @@ urbanchickencoop.com
 urbanforestryllc.com
 urbanized.us
 urbanlegendsvideo.com
-urbanovalife.com
 urbanquarter.co
 urbanspacepractice.com
 urbanstudios.online
@@ -65030,7 +65033,6 @@ urx7.com
 urxv.com
 us-dc.lol
 us-p2.top
-us-pay.icu
 us-pt.top
 us-top.net
 us-uggboots.com
@@ -66045,6 +66047,7 @@ viewcastmedia.com
 viewcastmedia.net
 viewcastmedia.org
 viewleaders.com
+viewmuse.com
 viewspotfit.com
 viewtechnology.info
 vifl.spymail.one
@@ -67053,7 +67056,6 @@ walterandnancy.com
 waltoncomp.com
 wamerangkul.com
 wameta.cloud
-wameta.xyz
 wampsetupserver.com
 wanadoo.com
 wanadoux.fr
@@ -67063,7 +67065,6 @@ wanbeiz.com
 wandahadissuara.com
 wanderingstarstudio.com
 wandsworthplumbers.com
-wangyangdahai.sbs
 wankedy.com
 wanko.be
 wannie.cf
@@ -68003,6 +68004,11 @@ windlady.com
 windlady.net
 windmine.tk
 window-55.net
+window.adsbygoogle
+window.changemailbox
+window.currentlang
+window.datalayer
+window.location.href
 windowoffice7.com
 windows.sos.pl
 windows8hosting.info
@@ -71228,7 +71234,6 @@ zhcne.com
 zhcvqqbvdc.ga
 zhehot.com
 zhengjiatpou34.info
-zhenniubia.top
 zherben.com
 zhess.xyz
 zhewei88.com
