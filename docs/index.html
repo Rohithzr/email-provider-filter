@@ -74,7 +74,28 @@
     box-shadow: var(--shadow);
   }
   .result.visible { display: block; }
-  .result-domain { font-size: 1.15rem; font-weight: 600; margin-bottom: 0.5rem; word-break: break-all; }
+  .result-header {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 0.5rem;
+  }
+  .result-favicon {
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+    flex-shrink: 0;
+    display: none;
+  }
+  .result-favicon.loaded { display: block; }
+  .result-domain { font-size: 1.15rem; font-weight: 600; word-break: break-all; }
+  .result-company {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+    display: none;
+  }
+  .result-company.visible { display: block; }
   .badge {
     display: inline-block;
     padding: 0.2rem 0.65rem;
@@ -131,14 +152,18 @@
 <body>
 <div class="container">
   <h1>Email Provider Filter</h1>
-  <p class="tagline">142,000+ email domains classified as disposable, free, or paid</p>
+  <p class="tagline">148,000+ email domains classified as disposable, free, or paid</p>
 
   <div class="search-box">
     <input type="text" id="input" placeholder="Enter email or domain (e.g. user@gmail.com)" autofocus>
   </div>
 
   <div class="result" id="result">
-    <div class="result-domain" id="result-domain"></div>
+    <div class="result-header">
+      <img class="result-favicon" id="result-favicon" alt="">
+      <div class="result-domain" id="result-domain"></div>
+    </div>
+    <div class="result-company" id="result-company"></div>
     <div id="result-badge"></div>
     <div class="result-desc" id="result-desc"></div>
   </div>
@@ -165,16 +190,54 @@
     return input.replace(/^www\./, '');
   }
 
+  function domainToName(domain) {
+    // Strip TLD and common SLDs, then title-case what remains
+    var parts = domain.split('.');
+    // Remove known multi-part TLDs (co.uk, com.br, etc.)
+    if (parts.length > 2) {
+      var last2 = parts.slice(-2).join('.');
+      var shortSLDs = ['co.uk','com.br','com.au','co.in','co.jp','co.kr','com.mx','com.cn','com.tw','co.nz','co.za'];
+      if (shortSLDs.indexOf(last2) !== -1) parts = parts.slice(0, -2);
+      else parts = parts.slice(0, -1);
+    } else {
+      parts = parts.slice(0, -1);
+    }
+    var name = parts.join(' ');
+    // Title case
+    return name.replace(/\b\w/g, function(c) { return c.toUpperCase(); });
+  }
+
   function lookup(domain) {
-    const el = $('result');
-    const domEl = $('result-domain');
-    const badgeEl = $('result-badge');
-    const descEl = $('result-desc');
+    var el = $('result');
+    var domEl = $('result-domain');
+    var badgeEl = $('result-badge');
+    var descEl = $('result-desc');
+    var faviconEl = $('result-favicon');
+    var companyEl = $('result-company');
 
     if (!domain) { el.classList.remove('visible'); return; }
 
     domEl.textContent = domain;
     el.classList.add('visible');
+
+    // Favicon via Google S2
+    faviconEl.classList.remove('loaded');
+    faviconEl.src = '';
+    var img = new Image();
+    img.onload = function() {
+      faviconEl.src = img.src;
+      faviconEl.classList.add('loaded');
+    };
+    img.src = 'https://www.google.com/s2/favicons?domain=' + encodeURIComponent(domain) + '&sz=32';
+
+    // Derive company name from domain
+    var company = domainToName(domain);
+    if (company && company.length > 1) {
+      companyEl.textContent = company;
+      companyEl.classList.add('visible');
+    } else {
+      companyEl.classList.remove('visible');
+    }
 
     if (sets.disposable.has(domain)) {
       badgeEl.innerHTML = '<span class="badge badge-disposable">Disposable</span>';
@@ -192,26 +255,25 @@
   }
 
   function renderStats(meta) {
-    const c = meta.categories;
-    const total = meta.total_domains.toLocaleString();
-    const updated = new Date(meta.generated).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+    var c = meta.categories;
+    var total = meta.total_domains.toLocaleString();
+    var updated = new Date(meta.generated).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
 
-    $('stats-area').innerHTML = `
-      <div class="stats">
-        <div class="stat-card"><div class="num">${total}</div><div class="label">Total Domains</div></div>
-        <div class="stat-card"><div class="num">${c.disposable.toLocaleString()}</div><div class="label">Disposable</div></div>
-        <div class="stat-card"><div class="num">${c.free.toLocaleString()}</div><div class="label">Free</div></div>
-        <div class="stat-card"><div class="num">${c.paid_personal.toLocaleString()}</div><div class="label">Paid Personal</div></div>
-      </div>
-      <p style="text-align:center;font-size:0.82rem;color:var(--text-muted);">Last updated: ${updated}</p>
-    `;
+    $('stats-area').innerHTML =
+      '<div class="stats">' +
+        '<div class="stat-card"><div class="num">' + total + '</div><div class="label">Total Domains</div></div>' +
+        '<div class="stat-card"><div class="num">' + c.disposable.toLocaleString() + '</div><div class="label">Disposable</div></div>' +
+        '<div class="stat-card"><div class="num">' + c.free.toLocaleString() + '</div><div class="label">Free</div></div>' +
+        '<div class="stat-card"><div class="num">' + c.paid_personal.toLocaleString() + '</div><div class="label">Paid Personal</div></div>' +
+      '</div>' +
+      '<p style="text-align:center;font-size:0.82rem;color:var(--text-muted);">Last updated: ' + updated + '</p>';
   }
 
   async function init() {
     try {
-      const resp = await fetch(CDN);
-      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-      const data = await resp.json();
+      var resp = await fetch(CDN);
+      if (!resp.ok) throw new Error('HTTP ' + resp.status);
+      var data = await resp.json();
 
       sets.disposable = new Set(data.domains.disposable);
       sets.free = new Set(data.domains.free);
@@ -223,7 +285,7 @@
         lookup(extractDomain(this.value));
       });
     } catch (e) {
-      $('stats-area').innerHTML = `<div class="error">Failed to load dataset. <br><small>${e.message}</small></div>`;
+      $('stats-area').innerHTML = '<div class="error">Failed to load dataset. <br><small>' + e.message + '</small></div>';
     }
   }
 

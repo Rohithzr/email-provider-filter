@@ -23,6 +23,14 @@
       "format": "txt",
       "count": "~5000",
       "updated": "regularly"
+    },
+    {
+      "name": "groundcat-disposable",
+      "url": "https://raw.githubusercontent.com/groundcat/disposable-email-domain-list/master/domains.txt",
+      "description": "MX-validated disposable email domains list",
+      "format": "txt",
+      "count": 27120,
+      "updated": "regularly"
     }
   ],
   "free_paid": [

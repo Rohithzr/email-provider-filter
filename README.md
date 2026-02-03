@@ -2,20 +2,20 @@
 
 [![Update Domains](https://github.com/Rohithzr/email-provider-filter/actions/workflows/update-domains.yml/badge.svg)](https://github.com/Rohithzr/email-provider-filter/actions/workflows/update-domains.yml)
 [![Latest Release](https://img.shields.io/github/v/release/Rohithzr/email-provider-filter)](https://github.com/Rohithzr/email-provider-filter/releases/latest)
-[![Domains](https://img.shields.io/badge/domains-142%2C000%2B-blue)](output/email_domains.json)
+[![Domains](https://img.shields.io/badge/domains-148%2C000%2B-blue)](output/email_domains.json)
 [![Updated](https://img.shields.io/badge/updated-daily-brightgreen)](#-automation)
 [![License: MIT](https://img.shields.io/badge/license-MIT-yellow)](LICENSE)
 
-142,000+ email domains classified as disposable, free, or paid — updated daily, zero dependencies to consume.
+148,000+ email domains classified as disposable, free, or paid — updated daily, zero dependencies to consume.
 
 ## Dataset Overview
 
-**142,285 domains** across 3 categories, updated daily:
+**148,635 domains** across 3 categories, updated daily:
 
 | Category | Count | Description |
 |----------|------:|-------------|
-| Disposable | 72,328 | Temporary/throwaway email domains |
-| Free | 69,935 | Free personal email providers |
+| Disposable | 79,842 | Temporary/throwaway email domains |
+| Free | 68,771 | Free personal email providers |
 | Paid Personal | 22 | Paid personal email services |
 
 ## Quick Start
@@ -88,7 +88,7 @@ should_block, reason = filter.should_block_email(
 
 | Feature | This Project | disposable-email-domains | mailchecker | burner-email-providers |
 |---------|:------------:|:------------------------:|:-----------:|:----------------------:|
-| Total Domains | **142,000+** | ~4,500 | ~35,000 | ~100,000 |
+| Total Domains | **148,000+** | ~4,500 | ~35,000 | ~100,000 |
 | Categories | 3 (disposable, free, paid) | 1 (disposable only) | 1 (disposable only) | 1 (disposable only) |
 | Free Provider Detection | Yes | No | No | No |
 | Auto-Updated | Daily | Community PRs | Manual | Weekly |
@@ -102,6 +102,7 @@ This dataset combines multiple reliable sources:
 
 - [disposable-email-domains](https://github.com/disposable-email-domains/disposable-email-domains) - Community-verified disposable domains
 - [disposable/disposable](https://github.com/disposable/disposable) - Large auto-generated list
+- [groundcat/disposable-email-domain-list](https://github.com/groundcat/disposable-email-domain-list) - MX-validated disposable domains
 - [ihmpavel/free-email-domains-list](https://github.com/ihmpavel/free-email-domains-list) - Comprehensive free provider list
 - Plus our own curated additions
 
@@ -114,9 +115,10 @@ Run `python3 scripts/aggregate.py` to generate `output/source_stats.json` with p
 |--------|------------:|-------------------:|--------:|
 | ihmpavel-free-domains | 96,649 | 96,649 | 0 |
 | disposable-massive | 72,209 | 45,527 | 26,682 |
+| groundcat-disposable | 27,120 | 6,352 | 20,768 |
 | all-email-providers | 6,104 | 3 | 6,101 |
 | disposable-email-domains | 5,156 | 19 | 5,137 |
-| unkn0w-disposable | 3,617 | 79 | 3,538 |
+| unkn0w-disposable | 3,617 | 77 | 3,540 |
 | paid-personal | 22 | 8 | 14 |
 | custom-disposable | 20 | 3 | 17 |
 
@@ -187,7 +189,16 @@ MIT License - Free for commercial and personal use.
 
 ## Acknowledgments
 
-Thanks to all the maintainers of the source repositories and contributors who help keep this dataset accurate and comprehensive.
+Thanks to the maintainers of every source repository that makes this project possible:
+
+- [@disposable-email-domains](https://github.com/disposable-email-domains) — community-curated disposable domain list
+- [@disposable](https://github.com/disposable) — massive auto-generated disposable domain collection
+- [@groundcat](https://github.com/groundcat) — MX-validated disposable domain list
+- [@unkn0w](https://github.com/unkn0w) — disposable domain list for newsletter spam prevention
+- [@ihmpavel](https://github.com/ihmpavel) — comprehensive free email domains list
+- [@ammarshah](https://github.com/ammarshah) — aggregated email provider domains gist
+
+And to every contributor who reports issues, suggests sources, and helps keep this dataset accurate.
 
 ---
 
