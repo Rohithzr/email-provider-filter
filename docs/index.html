@@ -19,6 +19,9 @@
     --badge-business: #457b9d;
     --input-bg: #ffffff;
     --shadow: 0 2px 8px rgba(0,0,0,0.08);
+    --code-bg: #f1f3f5;
+    --tab-bg: #e9ecef;
+    --tab-active: #ffffff;
   }
   @media (prefers-color-scheme: dark) {
     :root {
@@ -31,6 +34,9 @@
       --primary-hover: #79b8ff;
       --input-bg: #0d1117;
       --shadow: 0 2px 8px rgba(0,0,0,0.3);
+      --code-bg: #1c2128;
+      --tab-bg: #21262d;
+      --tab-active: #161b22;
     }
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -46,6 +52,7 @@
   }
   .container { max-width: 640px; width: 100%; }
   h1 { font-size: 1.75rem; margin-bottom: 0.25rem; }
+  h2 { font-size: 1.2rem; margin-bottom: 0.75rem; }
   .tagline { color: var(--text-muted); margin-bottom: 2rem; font-size: 0.95rem; }
   .search-box {
     position: relative;
@@ -126,6 +133,52 @@
   }
   .stat-card .num { font-size: 1.35rem; font-weight: 700; }
   .stat-card .label { font-size: 0.78rem; color: var(--text-muted); margin-top: 0.2rem; }
+  .snippets {
+    margin-bottom: 2rem;
+  }
+  .tabs {
+    display: flex;
+    gap: 0;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 0;
+  }
+  .tab {
+    padding: 0.5rem 1rem;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    background: var(--tab-bg);
+    border: 1px solid var(--border);
+    border-bottom: none;
+    border-radius: 8px 8px 0 0;
+    color: var(--text-muted);
+    margin-right: -1px;
+  }
+  .tab.active {
+    background: var(--code-bg);
+    color: var(--text);
+    border-bottom: 1px solid var(--code-bg);
+    position: relative;
+    z-index: 1;
+  }
+  .code-panel {
+    display: none;
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-top: none;
+    border-radius: 0 0 10px 10px;
+    padding: 1rem;
+    overflow-x: auto;
+  }
+  .code-panel.active { display: block; }
+  .code-panel pre {
+    margin: 0;
+    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    font-size: 0.8rem;
+    line-height: 1.5;
+    white-space: pre;
+    color: var(--text);
+  }
   .loading {
     text-align: center;
     padding: 3rem 0;
@@ -172,6 +225,69 @@
   <div id="stats-area">
     <p class="loading" id="loading">Loading dataset...</p>
   </div>
+
+  <div class="snippets">
+    <h2>Use in your project</h2>
+    <div class="tabs">
+      <div class="tab active" data-lang="js">JavaScript</div>
+      <div class="tab" data-lang="python">Python</div>
+      <div class="tab" data-lang="php">PHP</div>
+    </div>
+    <div class="code-panel active" id="panel-js"><pre>const resp = await fetch(
+  "https://raw.githubusercontent.com/Rohithzr/email-provider-filter/main/output/email_domains.json"
+);
+const data = await resp.json();
+
+const disposable = new Set(data.domains.disposable);
+const free = new Set(data.domains.free);
+
+function classify(email) {
+  const domain = email.split("@").pop().toLowerCase();
+  if (disposable.has(domain)) return "disposable";
+  if (free.has(domain))       return "free";
+  return "business";
+}
+
+console.log(classify("user@gmail.com"));    // "free"
+console.log(classify("ceo@company.com"));   // "business"</pre></div>
+    <div class="code-panel" id="panel-python"><pre>import json, urllib.request
+
+data = json.loads(urllib.request.urlopen(
+    "https://raw.githubusercontent.com/Rohithzr/email-provider-filter/main/output/email_domains.json"
+).read())
+
+disposable = set(data["domains"]["disposable"])
+free = set(data["domains"]["free"])
+
+def classify(email: str) -> str:
+    domain = email.rsplit("@", 1)[-1].lower()
+    if domain in disposable:
+        return "disposable"
+    if domain in free:
+        return "free"
+    return "business"
+
+print(classify("user@gmail.com"))    # free
+print(classify("ceo@company.com"))   # business</pre></div>
+    <div class="code-panel" id="panel-php"><pre>$json = file_get_contents(
+    "https://raw.githubusercontent.com/Rohithzr/email-provider-filter/main/output/email_domains.json"
+);
+$data = json_decode($json, true);
+
+$disposable = array_flip($data["domains"]["disposable"]);
+$free       = array_flip($data["domains"]["free"]);
+
+function classify(string $email): string {
+    global $disposable, $free;
+    $domain = strtolower(explode("@", $email)[1]);
+    if (isset($disposable[$domain])) return "disposable";
+    if (isset($free[$domain]))       return "free";
+    return "business";
+}
+
+echo classify("user@gmail.com");    // free
+echo classify("ceo@company.com");   // business</pre></div>
+  </div>
 </div>
 
 <footer>
@@ -181,22 +297,23 @@
 
 <script>
 (function() {
-  const CDN = 'https://cdn.jsdelivr.net/gh/Rohithzr/email-provider-filter@main/output/email_domains.json';
-  const LOGO_TOKEN = 'pk_CF5QsMrdQsacbFB6uJjvug';
-  let sets = {};
+  var DATA_URL = 'https://raw.githubusercontent.com/Rohithzr/email-provider-filter/main/output/email_domains.json';
+  var LOGO_TOKEN = 'pk_CF5QsMrdQsacbFB6uJjvug';
+  var sets = {};
 
-  const $ = id => document.getElementById(id);
+  var $ = function(id) { return document.getElementById(id); };
 
   function extractDomain(input) {
     input = input.trim().toLowerCase();
     if (input.includes('@')) input = input.split('@').pop();
-    return input.replace(/^www\./, '');
+    input = input.replace(/^www\./, '');
+    // Must contain at least one dot to be a valid domain
+    if (!input.includes('.')) return '';
+    return input;
   }
 
   function domainToName(domain) {
-    // Strip TLD and common SLDs, then title-case what remains
     var parts = domain.split('.');
-    // Remove known multi-part TLDs (co.uk, com.br, etc.)
     if (parts.length > 2) {
       var last2 = parts.slice(-2).join('.');
       var shortSLDs = ['co.uk','com.br','com.au','co.in','co.jp','co.kr','com.mx','com.cn','com.tw','co.nz','co.za'];
@@ -206,7 +323,6 @@
       parts = parts.slice(0, -1);
     }
     var name = parts.join(' ');
-    // Title case
     return name.replace(/\b\w/g, function(c) { return c.toUpperCase(); });
   }
 
@@ -223,7 +339,7 @@
     domEl.textContent = domain;
     el.classList.add('visible');
 
-    // Logo via Logo.dev (falls back gracefully)
+    // Logo via Logo.dev
     faviconEl.classList.remove('loaded');
     faviconEl.src = '';
     var img = new Image();
@@ -272,9 +388,19 @@
       '<p style="text-align:center;font-size:0.82rem;color:var(--text-muted);">Last updated: ' + updated + '</p>';
   }
 
+  // Tab switching
+  document.querySelectorAll('.tab').forEach(function(tab) {
+    tab.addEventListener('click', function() {
+      document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); });
+      document.querySelectorAll('.code-panel').forEach(function(p) { p.classList.remove('active'); });
+      tab.classList.add('active');
+      $('panel-' + tab.dataset.lang).classList.add('active');
+    });
+  });
+
   async function init() {
     try {
-      var resp = await fetch(CDN);
+      var resp = await fetch(DATA_URL);
       if (!resp.ok) throw new Error('HTTP ' + resp.status);
       var data = await resp.json();
 
