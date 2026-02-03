@@ -45,6 +45,21 @@ jobs:
           # Set tag name for release
           echo "tag_name=v$(date +'%Y%m%d-%H%M')" >> $GITHUB_OUTPUT
           echo "release_name=Email Domains $(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
+          # Read delta stats
+          if [ -f output/delta.json ]; then
+            echo "total_added=$(jq -r '.total_added' output/delta.json)" >> $GITHUB_OUTPUT
+            echo "total_removed=$(jq -r '.total_removed' output/delta.json)" >> $GITHUB_OUTPUT
+            echo "total_domains=$(jq -r '.total_domains' output/delta.json)" >> $GITHUB_OUTPUT
+            echo "disposable_added=$(jq -r '.categories.disposable.added' output/delta.json)" >> $GITHUB_OUTPUT
+            echo "disposable_removed=$(jq -r '.categories.disposable.removed' output/delta.json)" >> $GITHUB_OUTPUT
+            echo "disposable_total=$(jq -r '.categories.disposable.total' output/delta.json)" >> $GITHUB_OUTPUT
+            echo "free_added=$(jq -r '.categories.free.added' output/delta.json)" >> $GITHUB_OUTPUT
+            echo "free_removed=$(jq -r '.categories.free.removed' output/delta.json)" >> $GITHUB_OUTPUT
+            echo "free_total=$(jq -r '.categories.free.total' output/delta.json)" >> $GITHUB_OUTPUT
+            echo "paid_personal_added=$(jq -r '.categories.paid_personal.added' output/delta.json)" >> $GITHUB_OUTPUT
+            echo "paid_personal_removed=$(jq -r '.categories.paid_personal.removed' output/delta.json)" >> $GITHUB_OUTPUT
+            echo "paid_personal_total=$(jq -r '.categories.paid_personal.total' output/delta.json)" >> $GITHUB_OUTPUT
+          fi
         fi
         
     - name: Commit and push changes
@@ -63,13 +78,24 @@ jobs:
         release_name: ${{ steps.changes.outputs.release_name }}
         body: |
           Daily update of email domain classifications
-          
-          Generated files:
+
+          ## Changes
+          | Category | Added | Removed | Total |
+          |----------|-------|---------|-------|
+          | Disposable | +${{ steps.changes.outputs.disposable_added }} | -${{ steps.changes.outputs.disposable_removed }} | ${{ steps.changes.outputs.disposable_total }} |
+          | Free | +${{ steps.changes.outputs.free_added }} | -${{ steps.changes.outputs.free_removed }} | ${{ steps.changes.outputs.free_total }} |
+          | Paid Personal | +${{ steps.changes.outputs.paid_personal_added }} | -${{ steps.changes.outputs.paid_personal_removed }} | ${{ steps.changes.outputs.paid_personal_total }} |
+          | **Total** | **+${{ steps.changes.outputs.total_added }}** | **-${{ steps.changes.outputs.total_removed }}** | **${{ steps.changes.outputs.total_domains }}** |
+
+          ## Generated Files
           - `email_domains.json` - Complete dataset in JSON format
-          - `email_domains.csv` - Complete dataset in CSV format  
+          - `email_domains.csv` - Complete dataset in CSV format
           - `disposable.txt` - Disposable email domains only
           - `free.txt` - Free email provider domains only
           - `paid_personal.txt` - Paid personal email provider domains only
+
+          ---
+          Sources: [disposable-email-domains](https://github.com/disposable-email-domains/disposable-email-domains), [mailchecker](https://github.com/FGRibreau/mailchecker), [burner-email-providers](https://github.com/wesbos/burner-email-providers), and curated additions.
         draft: false
         prerelease: false
         

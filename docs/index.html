@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Email Provider Filter - Domain Lookup</title>
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg-card: #f8f9fa;
+    --text: #1a1a2e;
+    --text-muted: #6c757d;
+    --border: #dee2e6;
+    --primary: #4361ee;
+    --primary-hover: #3a56d4;
+    --badge-disposable: #e63946;
+    --badge-free: #2a9d8f;
+    --badge-paid: #e9c46a;
+    --badge-business: #457b9d;
+    --input-bg: #ffffff;
+    --shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0d1117;
+      --bg-card: #161b22;
+      --text: #e6edf3;
+      --text-muted: #8b949e;
+      --border: #30363d;
+      --primary: #58a6ff;
+      --primary-hover: #79b8ff;
+      --input-bg: #0d1117;
+      --shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem 1rem;
+  }
+  .container { max-width: 640px; width: 100%; }
+  h1 { font-size: 1.75rem; margin-bottom: 0.25rem; }
+  .tagline { color: var(--text-muted); margin-bottom: 2rem; font-size: 0.95rem; }
+  .search-box {
+    position: relative;
+    margin-bottom: 1.5rem;
+  }
+  .search-box input {
+    width: 100%;
+    padding: 0.85rem 1rem;
+    font-size: 1.1rem;
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    background: var(--input-bg);
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .search-box input:focus { border-color: var(--primary); }
+  .search-box input::placeholder { color: var(--text-muted); }
+  .result {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.25rem;
+    margin-bottom: 1.5rem;
+    display: none;
+    box-shadow: var(--shadow);
+  }
+  .result.visible { display: block; }
+  .result-domain { font-size: 1.15rem; font-weight: 600; margin-bottom: 0.5rem; word-break: break-all; }
+  .badge {
+    display: inline-block;
+    padding: 0.2rem 0.65rem;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #fff;
+  }
+  .badge-disposable { background: var(--badge-disposable); }
+  .badge-free { background: var(--badge-free); }
+  .badge-paid { background: var(--badge-paid); }
+  .badge-business { background: var(--badge-business); }
+  .result-desc { color: var(--text-muted); font-size: 0.9rem; margin-top: 0.4rem; }
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+  }
+  .stat-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1rem;
+    text-align: center;
+    box-shadow: var(--shadow);
+  }
+  .stat-card .num { font-size: 1.35rem; font-weight: 700; }
+  .stat-card .label { font-size: 0.78rem; color: var(--text-muted); margin-top: 0.2rem; }
+  .loading {
+    text-align: center;
+    padding: 3rem 0;
+    color: var(--text-muted);
+  }
+  .error {
+    text-align: center;
+    padding: 2rem;
+    color: var(--badge-disposable);
+    background: var(--bg-card);
+    border-radius: 10px;
+    border: 1px solid var(--border);
+  }
+  footer {
+    margin-top: auto;
+    padding-top: 2rem;
+    text-align: center;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+  footer a { color: var(--primary); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Email Provider Filter</h1>
+  <p class="tagline">142,000+ email domains classified as disposable, free, or paid</p>
+
+  <div class="search-box">
+    <input type="text" id="input" placeholder="Enter email or domain (e.g. user@gmail.com)" autofocus>
+  </div>
+
+  <div class="result" id="result">
+    <div class="result-domain" id="result-domain"></div>
+    <div id="result-badge"></div>
+    <div class="result-desc" id="result-desc"></div>
+  </div>
+
+  <div id="stats-area">
+    <p class="loading" id="loading">Loading dataset...</p>
+  </div>
+</div>
+
+<footer>
+  <p>Data from <a href="https://github.com/Rohithzr/email-provider-filter">email-provider-filter</a> &middot; Updated daily</p>
+</footer>
+
+<script>
+(function() {
+  const CDN = 'https://cdn.jsdelivr.net/gh/Rohithzr/email-provider-filter@main/output/email_domains.json';
+  let sets = {};
+
+  const $ = id => document.getElementById(id);
+
+  function extractDomain(input) {
+    input = input.trim().toLowerCase();
+    if (input.includes('@')) input = input.split('@').pop();
+    return input.replace(/^www\./, '');
+  }
+
+  function lookup(domain) {
+    const el = $('result');
+    const domEl = $('result-domain');
+    const badgeEl = $('result-badge');
+    const descEl = $('result-desc');
+
+    if (!domain) { el.classList.remove('visible'); return; }
+
+    domEl.textContent = domain;
+    el.classList.add('visible');
+
+    if (sets.disposable.has(domain)) {
+      badgeEl.innerHTML = '<span class="badge badge-disposable">Disposable</span>';
+      descEl.textContent = 'This is a temporary/throwaway email domain. Likely used to bypass signups.';
+    } else if (sets.free.has(domain)) {
+      badgeEl.innerHTML = '<span class="badge badge-free">Free</span>';
+      descEl.textContent = 'This is a free personal email provider (e.g. Gmail, Yahoo).';
+    } else if (sets.paid_personal.has(domain)) {
+      badgeEl.innerHTML = '<span class="badge badge-paid">Paid Personal</span>';
+      descEl.textContent = 'This is a paid personal email service (e.g. Hey, Fastmail).';
+    } else {
+      badgeEl.innerHTML = '<span class="badge badge-business">Business / Unknown</span>';
+      descEl.textContent = 'Not in our dataset. Likely a business or custom domain.';
+    }
+  }
+
+  function renderStats(meta) {
+    const c = meta.categories;
+    const total = meta.total_domains.toLocaleString();
+    const updated = new Date(meta.generated).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+
+    $('stats-area').innerHTML = `
+      <div class="stats">
+        <div class="stat-card"><div class="num">${total}</div><div class="label">Total Domains</div></div>
+        <div class="stat-card"><div class="num">${c.disposable.toLocaleString()}</div><div class="label">Disposable</div></div>
+        <div class="stat-card"><div class="num">${c.free.toLocaleString()}</div><div class="label">Free</div></div>
+        <div class="stat-card"><div class="num">${c.paid_personal.toLocaleString()}</div><div class="label">Paid Personal</div></div>
+      </div>
+      <p style="text-align:center;font-size:0.82rem;color:var(--text-muted);">Last updated: ${updated}</p>
+    `;
+  }
+
+  async function init() {
+    try {
+      const resp = await fetch(CDN);
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+      const data = await resp.json();
+
+      sets.disposable = new Set(data.domains.disposable);
+      sets.free = new Set(data.domains.free);
+      sets.paid_personal = new Set(data.domains.paid_personal);
+
+      renderStats(data.metadata);
+
+      $('input').addEventListener('input', function() {
+        lookup(extractDomain(this.value));
+      });
+    } catch (e) {
+      $('stats-area').innerHTML = `<div class="error">Failed to load dataset. <br><small>${e.message}</small></div>`;
+    }
+  }
+
+  init();
+})();
+</script>
+</body>
+</html>
