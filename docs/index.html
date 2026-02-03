@@ -81,11 +81,12 @@
     margin-bottom: 0.5rem;
   }
   .result-favicon {
-    width: 24px;
-    height: 24px;
-    border-radius: 4px;
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
     flex-shrink: 0;
     display: none;
+    object-fit: contain;
   }
   .result-favicon.loaded { display: block; }
   .result-domain { font-size: 1.15rem; font-weight: 600; word-break: break-all; }
@@ -180,6 +181,7 @@
 <script>
 (function() {
   const CDN = 'https://cdn.jsdelivr.net/gh/Rohithzr/email-provider-filter@main/output/email_domains.json';
+  const LOGO_TOKEN = 'pk_CF5QsMrdQsacbFB6uJjvug';
   let sets = {};
 
   const $ = id => document.getElementById(id);
@@ -220,7 +222,7 @@
     domEl.textContent = domain;
     el.classList.add('visible');
 
-    // Favicon via Google S2
+    // Logo via Logo.dev (falls back gracefully)
     faviconEl.classList.remove('loaded');
     faviconEl.src = '';
     var img = new Image();
@@ -228,7 +230,7 @@
       faviconEl.src = img.src;
       faviconEl.classList.add('loaded');
     };
-    img.src = 'https://www.google.com/s2/favicons?domain=' + encodeURIComponent(domain) + '&sz=32';
+    img.src = 'https://img.logo.dev/' + encodeURIComponent(domain) + '?token=' + LOGO_TOKEN + '&size=64&format=png';
 
     // Derive company name from domain
     var company = domainToName(domain);
