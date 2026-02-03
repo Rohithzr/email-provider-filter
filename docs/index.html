@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Email Provider Filter - Domain Lookup</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   /* shadcn zinc palette */
   :root, [data-theme="light"] {
@@ -28,8 +31,8 @@
     --badge-free-bg: #f0fdf4; --badge-free-text: #166534; --badge-free-border: #bbf7d0;
     --badge-paid-bg: #fffbeb; --badge-paid-text: #92400e; --badge-paid-border: #fde68a;
     --badge-business-bg: #eff6ff; --badge-business-text: #1e40af; --badge-business-border: #bfdbfe;
-    --code-bg: #18181b; --code-text: #fafafa; --code-muted: #a1a1aa; --code-border: #27272a;
-    --code-copy-bg: #27272a; --code-copy-hover: #3f3f46;
+    --code-bg: #fafafa; --code-text: #18181b; --code-muted: #a1a1aa; --code-border: #e4e4e7;
+    --code-copy-bg: #f4f4f5; --code-copy-hover: #e4e4e7;
   }
   [data-theme="dark"] {
     --background: #09090b;
@@ -59,7 +62,7 @@
   *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
   body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', Roboto, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     background: var(--background);
     color: var(--foreground);
     min-height: 100vh;
@@ -104,23 +107,34 @@
     transition: color 0.15s, background 0.15s;
   }
   .nav-link:hover { color: var(--foreground); background: var(--accent); }
-  .theme-btn {
-    width: 32px;
-    height: 32px;
+  .theme-switcher {
+    display: inline-flex;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: var(--muted);
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .theme-opt {
+    width: 30px;
+    height: 30px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
+    border: none;
     background: transparent;
     cursor: pointer;
     color: var(--muted-foreground);
-    transition: color 0.15s, background 0.15s, border-color 0.15s;
+    transition: color 0.15s, background 0.15s;
+    position: relative;
   }
-  .theme-btn:hover { color: var(--foreground); background: var(--accent); }
-  .theme-btn svg { width: 16px; height: 16px; }
-  [data-theme="light"] .icon-sun { display: none; }
-  [data-theme="dark"] .icon-moon { display: none; }
+  .theme-opt:hover { color: var(--foreground); }
+  .theme-opt.active {
+    background: var(--background);
+    color: var(--foreground);
+    box-shadow: var(--shadow-sm);
+  }
+  .theme-opt svg { width: 14px; height: 14px; }
 
   /* Main */
   .main {
@@ -210,26 +224,40 @@
   }
   .result-desc.visible { display: block; }
 
-  /* Two-column grid */
-  .grid { display: grid; grid-template-columns: 280px 1fr; gap: 1.5rem; align-items: start; }
-
-  /* Stats */
-  .stats-section {}
-  .stats-title { font-size: 0.8rem; font-weight: 500; color: var(--muted-foreground); margin-bottom: 0.65rem; text-transform: uppercase; letter-spacing: 0.05em; }
-  .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
-  .stat {
+  /* Stats - horizontal strip */
+  .stats-section { margin-bottom: 1.5rem; }
+  .stats-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 0.85rem;
     border: 1px solid var(--border);
     border-radius: var(--radius);
-    padding: 0.75rem;
     background: var(--card);
+    flex-wrap: wrap;
     transition: background 0.15s, border-color 0.15s;
   }
-  .stat-num { font-size: 1.25rem; font-weight: 700; letter-spacing: -0.025em; }
-  .stat-label { font-size: 0.7rem; color: var(--muted-foreground); margin-top: 0.1rem; }
-  .stats-updated { font-size: 0.7rem; color: var(--muted-foreground); margin-top: 0.5rem; }
+  .stats-bar .stat-item {
+    display: flex;
+    align-items: baseline;
+    gap: 0.3rem;
+    font-size: 0.8rem;
+  }
+  .stats-bar .stat-item:not(:last-child)::after {
+    content: '';
+    display: inline-block;
+    width: 1px;
+    height: 14px;
+    background: var(--border);
+    margin-left: 0.5rem;
+    vertical-align: middle;
+  }
+  .stat-num { font-weight: 700; letter-spacing: -0.01em; }
+  .stat-label { color: var(--muted-foreground); font-size: 0.75rem; }
+  .stats-updated { font-size: 0.7rem; color: var(--muted-foreground); margin-left: auto; }
 
   /* Code block */
-  .code-section { min-width: 0; }
+  .code-section { margin-bottom: 1.5rem; }
   .code-block {
     border-radius: var(--radius);
     overflow: hidden;
@@ -287,7 +315,7 @@
   .code-body.active { display: block; }
   .code-body pre {
     margin: 0;
-    font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', 'JetBrains Mono', 'Consolas', monospace;
+    font-family: 'JetBrains Mono', 'SF Mono', 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
     font-size: 0.78rem;
     line-height: 1.55;
     white-space: pre;
@@ -319,16 +347,14 @@
     .main { padding: 1.5rem 1rem; }
     .hero h1 { font-size: 1.5rem; }
     .hero p { font-size: 0.85rem; }
-    .grid { grid-template-columns: 1fr; gap: 1.25rem; }
-    .stats-grid { grid-template-columns: repeat(4, 1fr); }
-    .stat { padding: 0.6rem 0.4rem; text-align: center; }
-    .stat-num { font-size: 1rem; }
+    .stats-bar { flex-wrap: wrap; }
+    .stats-updated { width: 100%; margin-left: 0; margin-top: 0.25rem; }
     .code-body { max-height: 220px; }
   }
   @media (max-width: 420px) {
-    .stats-grid { grid-template-columns: repeat(2, 1fr); }
     .result-card { padding: 0.7rem 0.85rem; }
     .copy-btn span { display: none; }
+    .stat-item { font-size: 0.75rem; }
   }
 </style>
 </head>
@@ -342,10 +368,17 @@
   <div class="nav-right">
     <a href="https://github.com/Rohithzr/email-provider-filter" class="nav-link">GitHub</a>
     <a href="https://github.com/Rohithzr/email-provider-filter/releases/latest" class="nav-link">Download</a>
-    <button class="theme-btn" id="theme-btn" aria-label="Toggle theme">
-      <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-      <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-    </button>
+    <div class="theme-switcher" id="theme-switcher">
+      <button class="theme-opt" data-theme-val="light" aria-label="Light mode">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      </button>
+      <button class="theme-opt" data-theme-val="system" aria-label="System theme">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+      </button>
+      <button class="theme-opt" data-theme-val="dark" aria-label="Dark mode">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+    </div>
   </div>
 </nav>
 
@@ -371,28 +404,27 @@
     </div>
   </div>
 
-  <div class="grid">
-    <div class="stats-section" id="stats-area">
-      <p class="loading">Loading dataset...</p>
-    </div>
-    <div class="code-section">
-      <div class="code-block">
-        <div class="code-header">
-          <div class="code-tabs">
-            <button class="code-tab active" data-lang="js">JavaScript</button>
-            <button class="code-tab" data-lang="python">Python</button>
-            <button class="code-tab" data-lang="php">PHP</button>
-          </div>
-          <button class="copy-btn" id="copy-btn">
-            <svg id="copy-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-            <svg id="check-icon" style="display:none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-            <span id="copy-label">Copy</span>
-          </button>
+  <div class="stats-section" id="stats-area">
+    <p class="loading">Loading dataset...</p>
+  </div>
+
+  <div class="code-section">
+    <div class="code-block">
+      <div class="code-header">
+        <div class="code-tabs">
+          <button class="code-tab active" data-lang="js">JavaScript</button>
+          <button class="code-tab" data-lang="python">Python</button>
+          <button class="code-tab" data-lang="php">PHP</button>
         </div>
-        <div class="code-body active" id="panel-js"><pre id="code-js"></pre></div>
-        <div class="code-body" id="panel-python"><pre id="code-python"></pre></div>
-        <div class="code-body" id="panel-php"><pre id="code-php"></pre></div>
+        <button class="copy-btn" id="copy-btn">
+          <svg id="copy-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          <svg id="check-icon" style="display:none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <span id="copy-label">Copy</span>
+        </button>
       </div>
+      <div class="code-body active" id="panel-js"><pre id="code-js"></pre></div>
+      <div class="code-body" id="panel-python"><pre id="code-python"></pre></div>
+      <div class="code-body" id="panel-php"><pre id="code-php"></pre></div>
     </div>
   </div>
 </main>
@@ -411,17 +443,25 @@
   var activeLang = 'js';
   var $ = function(id) { return document.getElementById(id); };
 
-  // Theme
-  function getPreferred() {
-    var s = localStorage.getItem('theme');
-    if (s) return s;
-    return matchMedia('(prefers-color-scheme:dark)').matches ? 'dark' : 'light';
+  // Theme (light / system / dark)
+  function resolveTheme(pref) {
+    if (pref === 'system') return matchMedia('(prefers-color-scheme:dark)').matches ? 'dark' : 'light';
+    return pref;
   }
-  function applyTheme(t) { document.documentElement.setAttribute('data-theme', t); localStorage.setItem('theme', t); }
-  applyTheme(getPreferred());
-  $('theme-btn').onclick = function() {
-    applyTheme(document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
-  };
+  function applyTheme(pref) {
+    localStorage.setItem('theme', pref);
+    document.documentElement.setAttribute('data-theme', resolveTheme(pref));
+    document.querySelectorAll('.theme-opt').forEach(function(b) {
+      b.classList.toggle('active', b.dataset.themeVal === pref);
+    });
+  }
+  applyTheme(localStorage.getItem('theme') || 'system');
+  matchMedia('(prefers-color-scheme:dark)').addEventListener('change', function() {
+    if (localStorage.getItem('theme') === 'system') applyTheme('system');
+  });
+  document.querySelectorAll('.theme-opt').forEach(function(b) {
+    b.onclick = function() { applyTheme(b.dataset.themeVal); };
+  });
 
   function extractDomain(v) {
     v = v.trim().toLowerCase();
@@ -526,14 +566,13 @@
     var c = meta.categories;
     var updated = new Date(meta.generated).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
     $('stats-area').innerHTML =
-      '<div class="stats-title">Dataset</div>' +
-      '<div class="stats-grid">' +
-        '<div class="stat"><div class="stat-num">' + meta.total_domains.toLocaleString() + '</div><div class="stat-label">Total domains</div></div>' +
-        '<div class="stat"><div class="stat-num">' + c.disposable.toLocaleString() + '</div><div class="stat-label">Disposable</div></div>' +
-        '<div class="stat"><div class="stat-num">' + c.free.toLocaleString() + '</div><div class="stat-label">Free</div></div>' +
-        '<div class="stat"><div class="stat-num">' + c.paid_personal.toLocaleString() + '</div><div class="stat-label">Paid personal</div></div>' +
-      '</div>' +
-      '<div class="stats-updated">Updated ' + updated + '</div>';
+      '<div class="stats-bar">' +
+        '<div class="stat-item"><span class="stat-num">' + meta.total_domains.toLocaleString() + '</span> <span class="stat-label">domains</span></div>' +
+        '<div class="stat-item"><span class="stat-num">' + c.disposable.toLocaleString() + '</span> <span class="stat-label">disposable</span></div>' +
+        '<div class="stat-item"><span class="stat-num">' + c.free.toLocaleString() + '</span> <span class="stat-label">free</span></div>' +
+        '<div class="stat-item"><span class="stat-num">' + c.paid_personal.toLocaleString() + '</span> <span class="stat-label">paid</span></div>' +
+        '<span class="stats-updated">Updated ' + updated + '</span>' +
+      '</div>';
   }
 
   // Tabs
