@@ -5,47 +5,45 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Email Provider Filter - Domain Lookup</title>
 <style>
-  :root {
+  :root, [data-theme="light"] {
     --bg: #ffffff;
     --bg-card: #f8f9fa;
     --text: #1a1a2e;
     --text-muted: #6c757d;
     --border: #dee2e6;
     --primary: #4361ee;
-    --primary-hover: #3a56d4;
     --badge-disposable: #e63946;
     --badge-free: #2a9d8f;
     --badge-paid: #e9c46a;
     --badge-business: #457b9d;
     --input-bg: #ffffff;
     --shadow: 0 2px 8px rgba(0,0,0,0.08);
-    --code-bg: #18181b;
+    --code-bg: #f4f4f5;
+    --code-text: #18181b;
+    --code-muted: #a1a1aa;
+    --tab-border: #e4e4e7;
+    --copy-bg: #e4e4e7;
+    --copy-hover: #d4d4d8;
+    --toggle-bg: #e4e4e7;
+    --toggle-knob: #ffffff;
+  }
+  [data-theme="dark"] {
+    --bg: #0d1117;
+    --bg-card: #161b22;
+    --text: #e6edf3;
+    --text-muted: #8b949e;
+    --border: #30363d;
+    --primary: #58a6ff;
+    --input-bg: #0d1117;
+    --shadow: 0 2px 8px rgba(0,0,0,0.3);
+    --code-bg: #161b22;
     --code-text: #e4e4e7;
     --code-muted: #71717a;
-    --tab-bg: transparent;
-    --tab-active-bg: #18181b;
-    --tab-active-text: #e4e4e7;
-    --tab-text: #71717a;
-    --tab-border: #27272a;
-    --copy-bg: #27272a;
-    --copy-hover: #3f3f46;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --bg: #0d1117;
-      --bg-card: #161b22;
-      --text: #e6edf3;
-      --text-muted: #8b949e;
-      --border: #30363d;
-      --primary: #58a6ff;
-      --primary-hover: #79b8ff;
-      --input-bg: #0d1117;
-      --shadow: 0 2px 8px rgba(0,0,0,0.3);
-      --code-bg: #0f0f11;
-      --code-text: #e4e4e7;
-      --tab-active-bg: #0f0f11;
-      --tab-border: #27272a;
-    }
+    --tab-border: #30363d;
+    --copy-bg: #21262d;
+    --copy-hover: #30363d;
+    --toggle-bg: #30363d;
+    --toggle-knob: #e6edf3;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
@@ -57,15 +55,54 @@
     flex-direction: column;
     align-items: center;
     padding: 2rem 1rem;
+    transition: background 0.2s, color 0.2s;
   }
   .container { max-width: 640px; width: 100%; }
-  h1 { font-size: 1.75rem; margin-bottom: 0.25rem; }
+
+  /* Header row */
+  .header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.25rem;
+  }
+  h1 { font-size: 1.75rem; }
   h2 { font-size: 1.2rem; margin-bottom: 0.75rem; }
   .tagline { color: var(--text-muted); margin-bottom: 2rem; font-size: 0.95rem; }
-  .search-box {
-    position: relative;
-    margin-bottom: 1.5rem;
+
+  /* Theme toggle */
+  .theme-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    cursor: pointer;
+    -webkit-user-select: none;
+    user-select: none;
   }
+  .theme-toggle svg { width: 16px; height: 16px; color: var(--text-muted); }
+  .toggle-track {
+    width: 36px;
+    height: 20px;
+    background: var(--toggle-bg);
+    border-radius: 999px;
+    position: relative;
+    transition: background 0.2s;
+  }
+  .toggle-knob {
+    width: 16px;
+    height: 16px;
+    background: var(--toggle-knob);
+    border-radius: 50%;
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    transition: transform 0.2s;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  }
+  [data-theme="dark"] .toggle-knob { transform: translateX(16px); }
+
+  /* Search */
+  .search-box { position: relative; margin-bottom: 1.5rem; }
   .search-box input {
     width: 100%;
     padding: 0.85rem 1rem;
@@ -75,10 +112,12 @@
     background: var(--input-bg);
     color: var(--text);
     outline: none;
-    transition: border-color 0.2s;
+    transition: border-color 0.2s, background 0.2s;
   }
   .search-box input:focus { border-color: var(--primary); }
   .search-box input::placeholder { color: var(--text-muted); }
+
+  /* Result card */
   .result {
     background: var(--bg-card);
     border: 1px solid var(--border);
@@ -87,167 +126,137 @@
     margin-bottom: 1.5rem;
     display: none;
     box-shadow: var(--shadow);
+    transition: background 0.2s, border-color 0.2s;
   }
   .result.visible { display: block; }
-  .result-header {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    margin-bottom: 0.5rem;
-  }
+  .result-header { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.5rem; }
   .result-favicon {
-    width: 32px;
-    height: 32px;
-    border-radius: 6px;
-    flex-shrink: 0;
-    display: none;
-    object-fit: contain;
+    width: 32px; height: 32px; border-radius: 6px;
+    flex-shrink: 0; display: none; object-fit: contain;
   }
   .result-favicon.loaded { display: block; }
   .result-domain { font-size: 1.15rem; font-weight: 600; word-break: break-all; }
-  .result-company {
-    font-size: 0.85rem;
-    color: var(--text-muted);
-    margin-bottom: 0.5rem;
-    display: none;
-  }
+  .result-company { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem; display: none; }
   .result-company.visible { display: block; }
   .badge {
-    display: inline-block;
-    padding: 0.2rem 0.65rem;
-    border-radius: 999px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: #fff;
+    display: inline-block; padding: 0.2rem 0.65rem; border-radius: 999px;
+    font-size: 0.8rem; font-weight: 600; color: #fff;
   }
   .badge-disposable { background: var(--badge-disposable); }
   .badge-free { background: var(--badge-free); }
   .badge-paid { background: var(--badge-paid); }
   .badge-business { background: var(--badge-business); }
   .result-desc { color: var(--text-muted); font-size: 0.9rem; margin-top: 0.4rem; }
+
+  /* Stats */
   .stats {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    grid-template-columns: repeat(4, 1fr);
     gap: 0.75rem;
     margin-bottom: 2rem;
   }
   .stat-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 1rem;
-    text-align: center;
-    box-shadow: var(--shadow);
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 10px; padding: 1rem; text-align: center;
+    box-shadow: var(--shadow); transition: background 0.2s, border-color 0.2s;
   }
   .stat-card .num { font-size: 1.35rem; font-weight: 700; }
   .stat-card .label { font-size: 0.78rem; color: var(--text-muted); margin-top: 0.2rem; }
 
-  /* Code block - shadcn style */
+  /* Code block */
   .snippets { margin-bottom: 2rem; }
   .code-block {
-    border-radius: 10px;
-    overflow: hidden;
+    border-radius: 10px; overflow: hidden;
     border: 1px solid var(--tab-border);
+    transition: border-color 0.2s;
   }
   .code-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: var(--code-bg);
-    border-bottom: 1px solid var(--tab-border);
-    padding: 0;
+    display: flex; align-items: center; justify-content: space-between;
+    background: var(--code-bg); border-bottom: 1px solid var(--tab-border);
+    padding: 0; transition: background 0.2s;
   }
-  .code-tabs {
-    display: flex;
-    gap: 0;
-    padding: 0;
-  }
+  .code-tabs { display: flex; gap: 0; padding: 0; overflow-x: auto; }
   .code-tab {
-    padding: 0.55rem 1rem;
-    font-size: 0.8rem;
-    font-weight: 500;
+    padding: 0.55rem 1rem; font-size: 0.8rem; font-weight: 500;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    cursor: pointer;
-    background: transparent;
-    border: none;
-    color: var(--tab-text);
-    position: relative;
-    transition: color 0.15s;
+    cursor: pointer; background: transparent; border: none;
+    color: var(--code-muted); position: relative; transition: color 0.15s;
+    white-space: nowrap;
   }
   .code-tab:hover { color: var(--code-text); }
-  .code-tab.active {
-    color: var(--code-text);
-  }
+  .code-tab.active { color: var(--code-text); }
   .code-tab.active::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background: var(--code-text);
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+    height: 2px; background: var(--primary);
   }
   .copy-btn {
-    display: flex;
-    align-items: center;
-    gap: 0.35rem;
-    padding: 0.35rem 0.7rem;
-    margin-right: 0.5rem;
+    display: flex; align-items: center; gap: 0.35rem;
+    padding: 0.35rem 0.7rem; margin-right: 0.5rem;
     font-size: 0.75rem;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    color: var(--code-muted);
-    background: var(--copy-bg);
-    border: 1px solid var(--tab-border);
-    border-radius: 6px;
-    cursor: pointer;
-    transition: all 0.15s;
+    color: var(--code-muted); background: var(--copy-bg);
+    border: 1px solid var(--tab-border); border-radius: 6px;
+    cursor: pointer; transition: all 0.15s; white-space: nowrap;
   }
   .copy-btn:hover { color: var(--code-text); background: var(--copy-hover); }
-  .copy-btn svg { width: 14px; height: 14px; }
+  .copy-btn svg { width: 14px; height: 14px; flex-shrink: 0; }
   .copy-btn.copied { color: #22c55e; }
   .code-body {
-    display: none;
-    background: var(--code-bg);
-    padding: 1rem 1.15rem;
-    overflow-x: auto;
+    display: none; background: var(--code-bg);
+    padding: 1rem 1.15rem; overflow-x: auto;
+    transition: background 0.2s;
   }
   .code-body.active { display: block; }
   .code-body pre {
     margin: 0;
     font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
-    font-size: 0.8rem;
-    line-height: 1.6;
-    white-space: pre;
+    font-size: 0.8rem; line-height: 1.6; white-space: pre;
     color: var(--code-text);
   }
 
-  .loading {
-    text-align: center;
-    padding: 3rem 0;
-    color: var(--text-muted);
-  }
+  .loading { text-align: center; padding: 3rem 0; color: var(--text-muted); }
   .error {
-    text-align: center;
-    padding: 2rem;
-    color: var(--badge-disposable);
-    background: var(--bg-card);
-    border-radius: 10px;
-    border: 1px solid var(--border);
+    text-align: center; padding: 2rem; color: var(--badge-disposable);
+    background: var(--bg-card); border-radius: 10px; border: 1px solid var(--border);
   }
   footer {
-    margin-top: auto;
-    padding-top: 2rem;
-    text-align: center;
-    font-size: 0.85rem;
-    color: var(--text-muted);
+    margin-top: auto; padding-top: 2rem; text-align: center;
+    font-size: 0.85rem; color: var(--text-muted);
   }
   footer a { color: var(--primary); text-decoration: none; }
   footer a:hover { text-decoration: underline; }
+
+  /* Responsive */
+  @media (max-width: 480px) {
+    body { padding: 1.25rem 0.75rem; }
+    h1 { font-size: 1.35rem; }
+    .tagline { font-size: 0.85rem; margin-bottom: 1.25rem; }
+    .search-box input { font-size: 1rem; padding: 0.75rem 0.85rem; }
+    .stats { grid-template-columns: repeat(2, 1fr); gap: 0.5rem; }
+    .stat-card { padding: 0.75rem 0.5rem; }
+    .stat-card .num { font-size: 1.1rem; }
+    .stat-card .label { font-size: 0.7rem; }
+    .result { padding: 1rem; }
+    .result-domain { font-size: 1rem; }
+    .code-tab { padding: 0.5rem 0.7rem; font-size: 0.75rem; }
+    .copy-btn { padding: 0.3rem 0.5rem; font-size: 0.7rem; }
+    .copy-btn span { display: none; }
+    .code-body { padding: 0.75rem; }
+    .code-body pre { font-size: 0.7rem; }
+    h2 { font-size: 1.05rem; }
+  }
 </style>
 </head>
 <body>
 <div class="container">
-  <h1>Email Provider Filter</h1>
+  <div class="header-row">
+    <h1>Email Provider Filter</h1>
+    <div class="theme-toggle" id="theme-toggle" role="button" aria-label="Toggle dark mode" tabindex="0">
+      <svg id="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      <div class="toggle-track"><div class="toggle-knob"></div></div>
+      <svg id="icon-moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </div>
+  </div>
   <p class="tagline">148,000+ email domains classified as disposable, free, or paid</p>
 
   <div class="search-box">
@@ -304,6 +313,26 @@
 
   var $ = function(id) { return document.getElementById(id); };
 
+  // Theme
+  function getPreferred() {
+    var saved = localStorage.getItem('theme');
+    if (saved) return saved;
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  }
+  function applyTheme(t) {
+    document.documentElement.setAttribute('data-theme', t);
+    localStorage.setItem('theme', t);
+  }
+  applyTheme(getPreferred());
+
+  $('theme-toggle').addEventListener('click', function() {
+    var current = document.documentElement.getAttribute('data-theme');
+    applyTheme(current === 'dark' ? 'light' : 'dark');
+  });
+  $('theme-toggle').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); this.click(); }
+  });
+
   function extractDomain(input) {
     input = input.trim().toLowerCase();
     if (input.includes('@')) input = input.split('@').pop();
@@ -337,7 +366,6 @@
     return { disposable: 'disposable', free: 'free', paid_personal: 'paid_personal', business: 'business' }[cat] || 'business';
   }
 
-  // Code generators
   function genJS(domain, cat) {
     var comment = cat === 'business'
       ? '// Result: not in dataset (business/custom domain)'
@@ -370,7 +398,6 @@
     return panel ? panel.textContent : '';
   }
 
-  // Copy button
   $('copy-btn').addEventListener('click', function() {
     var code = getActiveCode();
     navigator.clipboard.writeText(code).then(function() {
@@ -400,7 +427,6 @@
     domEl.textContent = domain;
     el.classList.add('visible');
 
-    // Favicon via Google S2
     faviconEl.classList.remove('loaded');
     faviconEl.src = '';
     var img = new Image();
@@ -453,7 +479,6 @@
       '<p style="text-align:center;font-size:0.82rem;color:var(--text-muted);">Last updated: ' + updated + '</p>';
   }
 
-  // Tab switching
   document.querySelectorAll('.code-tab').forEach(function(tab) {
     tab.addEventListener('click', function() {
       document.querySelectorAll('.code-tab').forEach(function(t) { t.classList.remove('active'); });
@@ -464,7 +489,6 @@
     });
   });
 
-  // Init snippets with default domain
   updateSnippets();
 
   async function init() {
