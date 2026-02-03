@@ -5,303 +5,402 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Email Provider Filter - Domain Lookup</title>
 <style>
+  /* shadcn zinc palette */
   :root, [data-theme="light"] {
-    --bg: #ffffff;
-    --bg-card: #f8f9fa;
-    --text: #1a1a2e;
-    --text-muted: #6c757d;
-    --border: #dee2e6;
-    --primary: #4361ee;
-    --badge-disposable: #e63946;
-    --badge-free: #2a9d8f;
-    --badge-paid: #e9c46a;
-    --badge-business: #457b9d;
-    --input-bg: #ffffff;
-    --shadow: 0 2px 8px rgba(0,0,0,0.08);
-    --code-bg: #f4f4f5;
-    --code-text: #18181b;
-    --code-muted: #a1a1aa;
-    --tab-border: #e4e4e7;
-    --copy-bg: #e4e4e7;
-    --copy-hover: #d4d4d8;
-    --toggle-bg: #e4e4e7;
-    --toggle-knob: #ffffff;
+    --background: #ffffff;
+    --foreground: #09090b;
+    --card: #ffffff;
+    --card-foreground: #09090b;
+    --muted: #f4f4f5;
+    --muted-foreground: #71717a;
+    --border: #e4e4e7;
+    --input: #e4e4e7;
+    --primary: #18181b;
+    --primary-foreground: #fafafa;
+    --secondary: #f4f4f5;
+    --secondary-foreground: #18181b;
+    --accent: #f4f4f5;
+    --ring: #a1a1aa;
+    --radius: 8px;
+    --shadow-sm: 0 1px 2px 0 rgba(0,0,0,0.05);
+    --shadow: 0 1px 3px 0 rgba(0,0,0,0.1), 0 1px 2px -1px rgba(0,0,0,0.1);
+    --badge-disposable-bg: #fef2f2; --badge-disposable-text: #991b1b; --badge-disposable-border: #fecaca;
+    --badge-free-bg: #f0fdf4; --badge-free-text: #166534; --badge-free-border: #bbf7d0;
+    --badge-paid-bg: #fffbeb; --badge-paid-text: #92400e; --badge-paid-border: #fde68a;
+    --badge-business-bg: #eff6ff; --badge-business-text: #1e40af; --badge-business-border: #bfdbfe;
+    --code-bg: #18181b; --code-text: #fafafa; --code-muted: #a1a1aa; --code-border: #27272a;
+    --code-copy-bg: #27272a; --code-copy-hover: #3f3f46;
   }
   [data-theme="dark"] {
-    --bg: #0d1117;
-    --bg-card: #161b22;
-    --text: #e6edf3;
-    --text-muted: #8b949e;
-    --border: #30363d;
-    --primary: #58a6ff;
-    --input-bg: #0d1117;
-    --shadow: 0 2px 8px rgba(0,0,0,0.3);
-    --code-bg: #161b22;
-    --code-text: #e4e4e7;
-    --code-muted: #71717a;
-    --tab-border: #30363d;
-    --copy-bg: #21262d;
-    --copy-hover: #30363d;
-    --toggle-bg: #30363d;
-    --toggle-knob: #e6edf3;
+    --background: #09090b;
+    --foreground: #fafafa;
+    --card: #0a0a0c;
+    --card-foreground: #fafafa;
+    --muted: #18181b;
+    --muted-foreground: #a1a1aa;
+    --border: #27272a;
+    --input: #27272a;
+    --primary: #fafafa;
+    --primary-foreground: #18181b;
+    --secondary: #27272a;
+    --secondary-foreground: #fafafa;
+    --accent: #27272a;
+    --ring: #52525b;
+    --shadow-sm: 0 1px 2px 0 rgba(0,0,0,0.3);
+    --shadow: 0 1px 3px 0 rgba(0,0,0,0.4), 0 1px 2px -1px rgba(0,0,0,0.3);
+    --badge-disposable-bg: #450a0a; --badge-disposable-text: #fca5a5; --badge-disposable-border: #7f1d1d;
+    --badge-free-bg: #052e16; --badge-free-text: #86efac; --badge-free-border: #166534;
+    --badge-paid-bg: #451a03; --badge-paid-text: #fcd34d; --badge-paid-border: #92400e;
+    --badge-business-bg: #172554; --badge-business-text: #93c5fd; --badge-business-border: #1e40af;
+    --code-bg: #0a0a0c; --code-text: #fafafa; --code-muted: #71717a; --code-border: #27272a;
+    --code-copy-bg: #18181b; --code-copy-hover: #27272a;
   }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
   body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, sans-serif;
-    background: var(--bg);
-    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', Roboto, sans-serif;
+    background: var(--background);
+    color: var(--foreground);
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    padding: 2rem 1rem;
-    transition: background 0.2s, color 0.2s;
+    transition: background 0.15s, color 0.15s;
+    -webkit-font-smoothing: antialiased;
   }
-  .container { max-width: 640px; width: 100%; }
 
-  /* Header row */
-  .header-row {
+  .page { flex: 1; display: flex; flex-direction: column; }
+
+  /* Nav */
+  .nav {
+    border-bottom: 1px solid var(--border);
+    padding: 0.75rem 1.5rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 0.25rem;
+    position: sticky;
+    top: 0;
+    background: var(--background);
+    z-index: 50;
+    transition: background 0.15s, border-color 0.15s;
   }
-  h1 { font-size: 1.75rem; }
-  h2 { font-size: 1.2rem; margin-bottom: 0.75rem; }
-  .tagline { color: var(--text-muted); margin-bottom: 2rem; font-size: 0.95rem; }
-
-  /* Theme toggle */
-  .theme-toggle {
+  .nav-brand {
     display: flex;
     align-items: center;
-    gap: 0.4rem;
+    gap: 0.5rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-decoration: none;
+    color: var(--foreground);
+  }
+  .nav-brand svg { width: 20px; height: 20px; }
+  .nav-right { display: flex; align-items: center; gap: 0.5rem; }
+  .nav-link {
+    font-size: 0.8rem;
+    color: var(--muted-foreground);
+    text-decoration: none;
+    padding: 0.35rem 0.65rem;
+    border-radius: var(--radius);
+    transition: color 0.15s, background 0.15s;
+  }
+  .nav-link:hover { color: var(--foreground); background: var(--accent); }
+  .theme-btn {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: transparent;
     cursor: pointer;
-    -webkit-user-select: none;
-    user-select: none;
+    color: var(--muted-foreground);
+    transition: color 0.15s, background 0.15s, border-color 0.15s;
   }
-  .theme-toggle svg { width: 16px; height: 16px; color: var(--text-muted); }
-  .toggle-track {
-    width: 36px;
-    height: 20px;
-    background: var(--toggle-bg);
-    border-radius: 999px;
-    position: relative;
-    transition: background 0.2s;
+  .theme-btn:hover { color: var(--foreground); background: var(--accent); }
+  .theme-btn svg { width: 16px; height: 16px; }
+  [data-theme="light"] .icon-sun { display: none; }
+  [data-theme="dark"] .icon-moon { display: none; }
+
+  /* Main */
+  .main {
+    max-width: 960px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 2rem 1.5rem;
+    flex: 1;
   }
-  .toggle-knob {
-    width: 16px;
-    height: 16px;
-    background: var(--toggle-knob);
-    border-radius: 50%;
-    position: absolute;
-    top: 2px;
-    left: 2px;
-    transition: transform 0.2s;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-  }
-  [data-theme="dark"] .toggle-knob { transform: translateX(16px); }
+
+  /* Hero */
+  .hero { text-align: center; margin-bottom: 1.75rem; }
+  .hero h1 { font-size: 2rem; font-weight: 700; letter-spacing: -0.025em; margin-bottom: 0.35rem; }
+  .hero p { color: var(--muted-foreground); font-size: 0.95rem; }
 
   /* Search */
-  .search-box { position: relative; margin-bottom: 1.5rem; }
-  .search-box input {
+  .search-wrap { position: relative; margin-bottom: 1.25rem; max-width: 560px; margin-left: auto; margin-right: auto; }
+  .search-wrap svg {
+    position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+    width: 16px; height: 16px; color: var(--muted-foreground); pointer-events: none;
+  }
+  .search-input {
     width: 100%;
-    padding: 0.85rem 1rem;
-    font-size: 1.1rem;
-    border: 2px solid var(--border);
-    border-radius: 10px;
-    background: var(--input-bg);
-    color: var(--text);
+    height: 40px;
+    padding: 0 0.85rem 0 2.5rem;
+    font-size: 0.875rem;
+    border: 1px solid var(--input);
+    border-radius: var(--radius);
+    background: transparent;
+    color: var(--foreground);
     outline: none;
-    transition: border-color 0.2s, background 0.2s;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    font-family: inherit;
   }
-  .search-box input:focus { border-color: var(--primary); }
-  .search-box input::placeholder { color: var(--text-muted); }
+  .search-input::placeholder { color: var(--muted-foreground); }
+  .search-input:focus { border-color: var(--ring); box-shadow: 0 0 0 2px var(--background), 0 0 0 4px var(--ring); }
 
-  /* Result card */
+  /* Result - inline compact */
   .result {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 1.25rem;
-    margin-bottom: 1.5rem;
+    max-width: 560px;
+    margin: 0 auto 1.75rem;
     display: none;
-    box-shadow: var(--shadow);
-    transition: background 0.2s, border-color 0.2s;
+    animation: slideDown 0.15s ease-out;
   }
+  @keyframes slideDown { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
   .result.visible { display: block; }
-  .result-header { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.5rem; }
-  .result-favicon {
-    width: 32px; height: 32px; border-radius: 6px;
-    flex-shrink: 0; display: none; object-fit: contain;
+  .result-card {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 0.85rem 1rem;
+    background: var(--card);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    transition: background 0.15s, border-color 0.15s;
   }
-  .result-favicon.loaded { display: block; }
-  .result-domain { font-size: 1.15rem; font-weight: 600; word-break: break-all; }
-  .result-company { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem; display: none; }
-  .result-company.visible { display: block; }
-  .badge {
-    display: inline-block; padding: 0.2rem 0.65rem; border-radius: 999px;
-    font-size: 0.8rem; font-weight: 600; color: #fff;
+  .result-icon {
+    width: 36px; height: 36px; border-radius: 8px;
+    display: none; object-fit: contain; flex-shrink: 0;
+    border: 1px solid var(--border);
   }
-  .badge-disposable { background: var(--badge-disposable); }
-  .badge-free { background: var(--badge-free); }
-  .badge-paid { background: var(--badge-paid); }
-  .badge-business { background: var(--badge-business); }
-  .result-desc { color: var(--text-muted); font-size: 0.9rem; margin-top: 0.4rem; }
+  .result-icon.loaded { display: block; }
+  .result-info { flex: 1; min-width: 0; }
+  .result-domain { font-size: 0.9rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .result-company { font-size: 0.75rem; color: var(--muted-foreground); }
+  .result-badge {
+    display: inline-flex; align-items: center;
+    padding: 0.15rem 0.55rem; border-radius: 999px;
+    font-size: 0.7rem; font-weight: 500;
+    border: 1px solid;
+    white-space: nowrap;
+  }
+  .badge-disposable { background: var(--badge-disposable-bg); color: var(--badge-disposable-text); border-color: var(--badge-disposable-border); }
+  .badge-free { background: var(--badge-free-bg); color: var(--badge-free-text); border-color: var(--badge-free-border); }
+  .badge-paid { background: var(--badge-paid-bg); color: var(--badge-paid-text); border-color: var(--badge-paid-border); }
+  .badge-business { background: var(--badge-business-bg); color: var(--badge-business-text); border-color: var(--badge-business-border); }
+  .result-desc {
+    width: 100%;
+    font-size: 0.8rem;
+    color: var(--muted-foreground);
+    margin-top: 0.15rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--border);
+    display: none;
+  }
+  .result-desc.visible { display: block; }
+
+  /* Two-column grid */
+  .grid { display: grid; grid-template-columns: 280px 1fr; gap: 1.5rem; align-items: start; }
 
   /* Stats */
-  .stats {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 0.75rem;
-    margin-bottom: 2rem;
+  .stats-section {}
+  .stats-title { font-size: 0.8rem; font-weight: 500; color: var(--muted-foreground); margin-bottom: 0.65rem; text-transform: uppercase; letter-spacing: 0.05em; }
+  .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+  .stat {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 0.75rem;
+    background: var(--card);
+    transition: background 0.15s, border-color 0.15s;
   }
-  .stat-card {
-    background: var(--bg-card); border: 1px solid var(--border);
-    border-radius: 10px; padding: 1rem; text-align: center;
-    box-shadow: var(--shadow); transition: background 0.2s, border-color 0.2s;
-  }
-  .stat-card .num { font-size: 1.35rem; font-weight: 700; }
-  .stat-card .label { font-size: 0.78rem; color: var(--text-muted); margin-top: 0.2rem; }
+  .stat-num { font-size: 1.25rem; font-weight: 700; letter-spacing: -0.025em; }
+  .stat-label { font-size: 0.7rem; color: var(--muted-foreground); margin-top: 0.1rem; }
+  .stats-updated { font-size: 0.7rem; color: var(--muted-foreground); margin-top: 0.5rem; }
 
   /* Code block */
-  .snippets { margin-bottom: 2rem; }
+  .code-section { min-width: 0; }
   .code-block {
-    border-radius: 10px; overflow: hidden;
-    border: 1px solid var(--tab-border);
-    transition: border-color 0.2s;
+    border-radius: var(--radius);
+    overflow: hidden;
+    border: 1px solid var(--code-border);
+    background: var(--code-bg);
   }
   .code-header {
-    display: flex; align-items: center; justify-content: space-between;
-    background: var(--code-bg); border-bottom: 1px solid var(--tab-border);
-    padding: 0; transition: background 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--code-border);
+    padding: 0 0.5rem 0 0;
+    height: 40px;
   }
-  .code-tabs { display: flex; gap: 0; padding: 0; overflow-x: auto; }
+  .code-tabs { display: flex; height: 100%; }
   .code-tab {
-    padding: 0.55rem 1rem; font-size: 0.8rem; font-weight: 500;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    cursor: pointer; background: transparent; border: none;
-    color: var(--code-muted); position: relative; transition: color 0.15s;
-    white-space: nowrap;
+    padding: 0 0.85rem;
+    font-size: 0.8rem;
+    font-weight: 450;
+    font-family: inherit;
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    color: var(--code-muted);
+    position: relative;
+    transition: color 0.15s;
+    height: 100%;
+    display: flex;
+    align-items: center;
   }
   .code-tab:hover { color: var(--code-text); }
   .code-tab.active { color: var(--code-text); }
   .code-tab.active::after {
-    content: ''; position: absolute; bottom: 0; left: 0; right: 0;
-    height: 2px; background: var(--primary);
+    content: ''; position: absolute; bottom: 0; left: 0.85rem; right: 0.85rem;
+    height: 2px; background: var(--code-text); border-radius: 1px;
   }
   .copy-btn {
-    display: flex; align-items: center; gap: 0.35rem;
-    padding: 0.35rem 0.7rem; margin-right: 0.5rem;
-    font-size: 0.75rem;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    color: var(--code-muted); background: var(--copy-bg);
-    border: 1px solid var(--tab-border); border-radius: 6px;
-    cursor: pointer; transition: all 0.15s; white-space: nowrap;
+    display: flex; align-items: center; gap: 0.3rem;
+    padding: 0.25rem 0.55rem;
+    font-size: 0.7rem; font-family: inherit;
+    color: var(--code-muted); background: var(--code-copy-bg);
+    border: 1px solid var(--code-border); border-radius: 6px;
+    cursor: pointer; transition: all 0.15s; flex-shrink: 0;
   }
-  .copy-btn:hover { color: var(--code-text); background: var(--copy-hover); }
-  .copy-btn svg { width: 14px; height: 14px; flex-shrink: 0; }
-  .copy-btn.copied { color: #22c55e; }
+  .copy-btn:hover { color: var(--code-text); background: var(--code-copy-hover); }
+  .copy-btn svg { width: 12px; height: 12px; flex-shrink: 0; }
+  .copy-btn.copied { color: #22c55e; border-color: #22c55e44; }
   .code-body {
-    display: none; background: var(--code-bg);
-    padding: 1rem 1.15rem; overflow-x: auto;
-    transition: background 0.2s;
+    display: none;
+    padding: 0.85rem 1rem;
+    overflow-x: auto;
+    max-height: 280px;
+    overflow-y: auto;
   }
   .code-body.active { display: block; }
   .code-body pre {
     margin: 0;
-    font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
-    font-size: 0.8rem; line-height: 1.6; white-space: pre;
+    font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', 'JetBrains Mono', 'Consolas', monospace;
+    font-size: 0.78rem;
+    line-height: 1.55;
+    white-space: pre;
     color: var(--code-text);
   }
 
-  .loading { text-align: center; padding: 3rem 0; color: var(--text-muted); }
+  .loading { text-align: center; padding: 2rem 0; color: var(--muted-foreground); font-size: 0.85rem; }
   .error {
-    text-align: center; padding: 2rem; color: var(--badge-disposable);
-    background: var(--bg-card); border-radius: 10px; border: 1px solid var(--border);
+    text-align: center; padding: 1.5rem; color: #ef4444;
+    background: var(--card); border-radius: var(--radius); border: 1px solid var(--border);
   }
+
+  /* Footer */
   footer {
-    margin-top: auto; padding-top: 2rem; text-align: center;
-    font-size: 0.85rem; color: var(--text-muted);
+    border-top: 1px solid var(--border);
+    padding: 1rem 1.5rem;
+    text-align: center;
+    font-size: 0.78rem;
+    color: var(--muted-foreground);
+    transition: border-color 0.15s;
   }
-  footer a { color: var(--primary); text-decoration: none; }
+  footer a { color: var(--foreground); text-decoration: none; font-weight: 500; }
   footer a:hover { text-decoration: underline; }
 
-  /* Responsive */
-  @media (max-width: 480px) {
-    body { padding: 1.25rem 0.75rem; }
-    h1 { font-size: 1.35rem; }
-    .tagline { font-size: 0.85rem; margin-bottom: 1.25rem; }
-    .search-box input { font-size: 1rem; padding: 0.75rem 0.85rem; }
-    .stats { grid-template-columns: repeat(2, 1fr); gap: 0.5rem; }
-    .stat-card { padding: 0.75rem 0.5rem; }
-    .stat-card .num { font-size: 1.1rem; }
-    .stat-card .label { font-size: 0.7rem; }
-    .result { padding: 1rem; }
-    .result-domain { font-size: 1rem; }
-    .code-tab { padding: 0.5rem 0.7rem; font-size: 0.75rem; }
-    .copy-btn { padding: 0.3rem 0.5rem; font-size: 0.7rem; }
+  /* Mobile */
+  @media (max-width: 700px) {
+    .nav { padding: 0.65rem 1rem; }
+    .nav-link { display: none; }
+    .main { padding: 1.5rem 1rem; }
+    .hero h1 { font-size: 1.5rem; }
+    .hero p { font-size: 0.85rem; }
+    .grid { grid-template-columns: 1fr; gap: 1.25rem; }
+    .stats-grid { grid-template-columns: repeat(4, 1fr); }
+    .stat { padding: 0.6rem 0.4rem; text-align: center; }
+    .stat-num { font-size: 1rem; }
+    .code-body { max-height: 220px; }
+  }
+  @media (max-width: 420px) {
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .result-card { padding: 0.7rem 0.85rem; }
     .copy-btn span { display: none; }
-    .code-body { padding: 0.75rem; }
-    .code-body pre { font-size: 0.7rem; }
-    h2 { font-size: 1.05rem; }
   }
 </style>
 </head>
 <body>
-<div class="container">
-  <div class="header-row">
-    <h1>Email Provider Filter</h1>
-    <div class="theme-toggle" id="theme-toggle" role="button" aria-label="Toggle dark mode" tabindex="0">
-      <svg id="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-      <div class="toggle-track"><div class="toggle-knob"></div></div>
-      <svg id="icon-moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-    </div>
+<div class="page">
+<nav class="nav">
+  <a href="https://github.com/Rohithzr/email-provider-filter" class="nav-brand">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+    Email Provider Filter
+  </a>
+  <div class="nav-right">
+    <a href="https://github.com/Rohithzr/email-provider-filter" class="nav-link">GitHub</a>
+    <a href="https://github.com/Rohithzr/email-provider-filter/releases/latest" class="nav-link">Download</a>
+    <button class="theme-btn" id="theme-btn" aria-label="Toggle theme">
+      <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
   </div>
-  <p class="tagline">148,000+ email domains classified as disposable, free, or paid</p>
+</nav>
 
-  <div class="search-box">
-    <input type="text" id="input" placeholder="Enter email or domain (e.g. user@gmail.com)" autofocus>
+<main class="main">
+  <div class="hero">
+    <h1>Domain Lookup</h1>
+    <p>Check if an email domain is disposable, free, or business</p>
+  </div>
+
+  <div class="search-wrap">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input type="text" class="search-input" id="input" placeholder="Search domain or email..." autofocus>
   </div>
 
   <div class="result" id="result">
-    <div class="result-header">
-      <img class="result-favicon" id="result-favicon" alt="">
-      <div class="result-domain" id="result-domain"></div>
-    </div>
-    <div class="result-company" id="result-company"></div>
-    <div id="result-badge"></div>
-    <div class="result-desc" id="result-desc"></div>
-  </div>
-
-  <div id="stats-area">
-    <p class="loading" id="loading">Loading dataset...</p>
-  </div>
-
-  <div class="snippets">
-    <h2>Use in your project</h2>
-    <div class="code-block">
-      <div class="code-header">
-        <div class="code-tabs">
-          <button class="code-tab active" data-lang="js">JavaScript</button>
-          <button class="code-tab" data-lang="python">Python</button>
-          <button class="code-tab" data-lang="php">PHP</button>
-        </div>
-        <button class="copy-btn" id="copy-btn">
-          <svg id="copy-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-          <svg id="check-icon" style="display:none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-          <span id="copy-label">Copy</span>
-        </button>
+    <div class="result-card">
+      <img class="result-icon" id="result-icon" alt="">
+      <div class="result-info">
+        <div class="result-domain" id="result-domain"></div>
+        <div class="result-company" id="result-company"></div>
       </div>
-      <div class="code-body active" id="panel-js"><pre id="code-js"></pre></div>
-      <div class="code-body" id="panel-python"><pre id="code-python"></pre></div>
-      <div class="code-body" id="panel-php"><pre id="code-php"></pre></div>
+      <div class="result-badge" id="result-badge"></div>
     </div>
   </div>
-</div>
+
+  <div class="grid">
+    <div class="stats-section" id="stats-area">
+      <p class="loading">Loading dataset...</p>
+    </div>
+    <div class="code-section">
+      <div class="code-block">
+        <div class="code-header">
+          <div class="code-tabs">
+            <button class="code-tab active" data-lang="js">JavaScript</button>
+            <button class="code-tab" data-lang="python">Python</button>
+            <button class="code-tab" data-lang="php">PHP</button>
+          </div>
+          <button class="copy-btn" id="copy-btn">
+            <svg id="copy-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            <svg id="check-icon" style="display:none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <span id="copy-label">Copy</span>
+          </button>
+        </div>
+        <div class="code-body active" id="panel-js"><pre id="code-js"></pre></div>
+        <div class="code-body" id="panel-python"><pre id="code-python"></pre></div>
+        <div class="code-body" id="panel-php"><pre id="code-php"></pre></div>
+      </div>
+    </div>
+  </div>
+</main>
 
 <footer>
-  <p>Data from <a href="https://github.com/Rohithzr/email-provider-filter">email-provider-filter</a> &middot; Updated daily</p>
+  Built by <a href="https://github.com/Rohithzr">Rohith</a> &middot; Updated daily &middot; <a href="https://github.com/Rohithzr/email-provider-filter">Star on GitHub</a>
 </footer>
+</div>
 
 <script>
 (function() {
@@ -310,81 +409,62 @@
   var currentDomain = 'gmail.com';
   var currentCategory = 'free';
   var activeLang = 'js';
-
   var $ = function(id) { return document.getElementById(id); };
 
   // Theme
   function getPreferred() {
-    var saved = localStorage.getItem('theme');
-    if (saved) return saved;
-    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    var s = localStorage.getItem('theme');
+    if (s) return s;
+    return matchMedia('(prefers-color-scheme:dark)').matches ? 'dark' : 'light';
   }
-  function applyTheme(t) {
-    document.documentElement.setAttribute('data-theme', t);
-    localStorage.setItem('theme', t);
-  }
+  function applyTheme(t) { document.documentElement.setAttribute('data-theme', t); localStorage.setItem('theme', t); }
   applyTheme(getPreferred());
+  $('theme-btn').onclick = function() {
+    applyTheme(document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+  };
 
-  $('theme-toggle').addEventListener('click', function() {
-    var current = document.documentElement.getAttribute('data-theme');
-    applyTheme(current === 'dark' ? 'light' : 'dark');
-  });
-  $('theme-toggle').addEventListener('keydown', function(e) {
-    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); this.click(); }
-  });
-
-  function extractDomain(input) {
-    input = input.trim().toLowerCase();
-    if (input.includes('@')) input = input.split('@').pop();
-    input = input.replace(/^www\./, '');
-    if (!input.includes('.')) return '';
-    return input;
+  function extractDomain(v) {
+    v = v.trim().toLowerCase();
+    if (v.includes('@')) v = v.split('@').pop();
+    v = v.replace(/^www\./, '');
+    return v.includes('.') ? v : '';
   }
 
-  function domainToName(domain) {
-    var parts = domain.split('.');
-    if (parts.length > 2) {
-      var last2 = parts.slice(-2).join('.');
-      var shortSLDs = ['co.uk','com.br','com.au','co.in','co.jp','co.kr','com.mx','com.cn','com.tw','co.nz','co.za'];
-      if (shortSLDs.indexOf(last2) !== -1) parts = parts.slice(0, -2);
-      else parts = parts.slice(0, -1);
-    } else {
-      parts = parts.slice(0, -1);
-    }
-    var name = parts.join(' ');
-    return name.replace(/\b\w/g, function(c) { return c.toUpperCase(); });
+  function domainToName(d) {
+    var p = d.split('.');
+    if (p.length > 2) {
+      var l = p.slice(-2).join('.');
+      if (['co.uk','com.br','com.au','co.in','co.jp','co.kr','com.mx','com.cn','com.tw','co.nz','co.za'].indexOf(l) !== -1) p = p.slice(0,-2);
+      else p = p.slice(0,-1);
+    } else p = p.slice(0,-1);
+    return p.join(' ').replace(/\b\w/g, function(c) { return c.toUpperCase(); });
   }
 
-  function getCategory(domain) {
-    if (sets.disposable && sets.disposable.has(domain)) return 'disposable';
-    if (sets.free && sets.free.has(domain)) return 'free';
-    if (sets.paid_personal && sets.paid_personal.has(domain)) return 'paid_personal';
+  function getCategory(d) {
+    if (sets.disposable && sets.disposable.has(d)) return 'disposable';
+    if (sets.free && sets.free.has(d)) return 'free';
+    if (sets.paid_personal && sets.paid_personal.has(d)) return 'paid_personal';
     return 'business';
   }
 
-  function categoryLabel(cat) {
-    return { disposable: 'disposable', free: 'free', paid_personal: 'paid_personal', business: 'business' }[cat] || 'business';
-  }
+  var catMeta = {
+    disposable: { label: 'Disposable', cls: 'badge-disposable', desc: 'Temporary/throwaway email domain' },
+    free: { label: 'Free', cls: 'badge-free', desc: 'Free personal email provider' },
+    paid_personal: { label: 'Paid Personal', cls: 'badge-paid', desc: 'Paid personal email service' },
+    business: { label: 'Business / Unknown', cls: 'badge-business', desc: 'Not in dataset — likely a business or custom domain' }
+  };
 
-  function genJS(domain, cat) {
-    var comment = cat === 'business'
-      ? '// Result: not in dataset (business/custom domain)'
-      : '// Result: "' + categoryLabel(cat) + '"';
-    return 'const resp = await fetch(\n  "' + DATA_URL + '"\n);\nconst data = await resp.json();\n\nconst disposable = new Set(data.domains.disposable);\nconst free = new Set(data.domains.free);\n\nfunction classify(email) {\n  const domain = email.split("@").pop().toLowerCase();\n  if (disposable.has(domain)) return "disposable";\n  if (free.has(domain))       return "free";\n  return "business";\n}\n\nconsole.log(classify("user@' + domain + '"));\n' + comment;
+  function genJS(d, c) {
+    var r = c === 'business' ? '// → not in dataset (business/custom)' : '// → "' + c + '"';
+    return 'const data = await fetch("' + DATA_URL + '")\n  .then(r => r.json());\n\nconst disposable = new Set(data.domains.disposable);\nconst free = new Set(data.domains.free);\n\nfunction classify(email) {\n  const d = email.split("@").pop().toLowerCase();\n  if (disposable.has(d)) return "disposable";\n  if (free.has(d))       return "free";\n  return "business";\n}\n\nclassify("user@' + d + '");\n' + r;
   }
-
-  function genPython(domain, cat) {
-    var comment = cat === 'business'
-      ? '# Result: not in dataset (business/custom domain)'
-      : '# Result: ' + categoryLabel(cat);
-    return 'import json, urllib.request\n\ndata = json.loads(urllib.request.urlopen(\n    "' + DATA_URL + '"\n).read())\n\ndisposable = set(data["domains"]["disposable"])\nfree = set(data["domains"]["free"])\n\ndef classify(email: str) -> str:\n    domain = email.rsplit("@", 1)[-1].lower()\n    if domain in disposable:\n        return "disposable"\n    if domain in free:\n        return "free"\n    return "business"\n\nprint(classify("user@' + domain + '"))\n' + comment;
+  function genPython(d, c) {
+    var r = c === 'business' ? '# → not in dataset (business/custom)' : '# → ' + c;
+    return 'import json, urllib.request\n\ndata = json.loads(urllib.request.urlopen(\n  "' + DATA_URL + '"\n).read())\n\ndisposable = set(data["domains"]["disposable"])\nfree = set(data["domains"]["free"])\n\ndef classify(email: str) -> str:\n    d = email.rsplit("@", 1)[-1].lower()\n    if d in disposable: return "disposable"\n    if d in free:       return "free"\n    return "business"\n\nclassify("user@' + d + '")\n' + r;
   }
-
-  function genPHP(domain, cat) {
-    var comment = cat === 'business'
-      ? '// Result: not in dataset (business/custom domain)'
-      : '// Result: ' + categoryLabel(cat);
-    return '$json = file_get_contents(\n    "' + DATA_URL + '"\n);\n$data = json_decode($json, true);\n\n$disposable = array_flip($data["domains"]["disposable"]);\n$free       = array_flip($data["domains"]["free"]);\n\nfunction classify(string $email): string {\n    global $disposable, $free;\n    $domain = strtolower(explode("@", $email)[1]);\n    if (isset($disposable[$domain])) return "disposable";\n    if (isset($free[$domain]))       return "free";\n    return "business";\n}\n\necho classify("user@' + domain + '");\n' + comment;
+  function genPHP(d, c) {
+    var r = c === 'business' ? '// → not in dataset (business/custom)' : '// → ' + c;
+    return '$data = json_decode(file_get_contents(\n  "' + DATA_URL + '"\n), true);\n\n$disposable = array_flip($data["domains"]["disposable"]);\n$free       = array_flip($data["domains"]["free"]);\n\nfunction classify(string $email): string {\n    global $disposable, $free;\n    $d = strtolower(explode("@", $email)[1]);\n    if (isset($disposable[$d])) return "disposable";\n    if (isset($free[$d]))       return "free";\n    return "business";\n}\n\nclassify("user@' + d + '");\n' + r;
   }
 
   function updateSnippets() {
@@ -393,14 +473,10 @@
     $('code-php').textContent = genPHP(currentDomain, currentCategory);
   }
 
-  function getActiveCode() {
-    var panel = $('panel-' + activeLang);
-    return panel ? panel.textContent : '';
-  }
-
-  $('copy-btn').addEventListener('click', function() {
-    var code = getActiveCode();
-    navigator.clipboard.writeText(code).then(function() {
+  // Copy
+  $('copy-btn').onclick = function() {
+    var t = $('panel-' + activeLang).textContent;
+    navigator.clipboard.writeText(t).then(function() {
       $('copy-icon').style.display = 'none';
       $('check-icon').style.display = '';
       $('copy-label').textContent = 'Copied!';
@@ -412,107 +488,82 @@
         $('copy-btn').classList.remove('copied');
       }, 2000);
     });
-  });
+  };
 
   function lookup(domain) {
     var el = $('result');
-    var domEl = $('result-domain');
-    var badgeEl = $('result-badge');
-    var descEl = $('result-desc');
-    var faviconEl = $('result-favicon');
-    var companyEl = $('result-company');
-
     if (!domain) { el.classList.remove('visible'); return; }
 
-    domEl.textContent = domain;
+    $('result-domain').textContent = domain;
+    el.classList.remove('visible');
+    void el.offsetWidth; // reflow for animation
     el.classList.add('visible');
 
-    faviconEl.classList.remove('loaded');
-    faviconEl.src = '';
+    var iconEl = $('result-icon');
+    iconEl.classList.remove('loaded');
+    iconEl.src = '';
     var img = new Image();
-    img.onload = function() {
-      faviconEl.src = img.src;
-      faviconEl.classList.add('loaded');
-    };
-    img.src = 'https://www.google.com/s2/favicons?domain=' + encodeURIComponent(domain) + '&sz=32';
+    img.onload = function() { iconEl.src = img.src; iconEl.classList.add('loaded'); };
+    img.src = 'https://www.google.com/s2/favicons?domain=' + encodeURIComponent(domain) + '&sz=64';
 
-    var company = domainToName(domain);
-    if (company && company.length > 1) {
-      companyEl.textContent = company;
-      companyEl.classList.add('visible');
-    } else {
-      companyEl.classList.remove('visible');
-    }
+    var name = domainToName(domain);
+    var compEl = $('result-company');
+    compEl.textContent = name && name.length > 1 ? name : '';
 
     var cat = getCategory(domain);
     currentDomain = domain;
     currentCategory = cat;
-    updateSnippets();
 
-    if (cat === 'disposable') {
-      badgeEl.innerHTML = '<span class="badge badge-disposable">Disposable</span>';
-      descEl.textContent = 'This is a temporary/throwaway email domain. Likely used to bypass signups.';
-    } else if (cat === 'free') {
-      badgeEl.innerHTML = '<span class="badge badge-free">Free</span>';
-      descEl.textContent = 'This is a free personal email provider (e.g. Gmail, Yahoo).';
-    } else if (cat === 'paid_personal') {
-      badgeEl.innerHTML = '<span class="badge badge-paid">Paid Personal</span>';
-      descEl.textContent = 'This is a paid personal email service (e.g. Hey, Fastmail).';
-    } else {
-      badgeEl.innerHTML = '<span class="badge badge-business">Business / Unknown</span>';
-      descEl.textContent = 'Not in our dataset. Likely a business or custom domain.';
-    }
+    var m = catMeta[cat];
+    var badgeEl = $('result-badge');
+    badgeEl.className = 'result-badge ' + m.cls;
+    badgeEl.textContent = m.label;
+
+    updateSnippets();
   }
 
   function renderStats(meta) {
     var c = meta.categories;
-    var total = meta.total_domains.toLocaleString();
     var updated = new Date(meta.generated).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
-
     $('stats-area').innerHTML =
-      '<div class="stats">' +
-        '<div class="stat-card"><div class="num">' + total + '</div><div class="label">Total Domains</div></div>' +
-        '<div class="stat-card"><div class="num">' + c.disposable.toLocaleString() + '</div><div class="label">Disposable</div></div>' +
-        '<div class="stat-card"><div class="num">' + c.free.toLocaleString() + '</div><div class="label">Free</div></div>' +
-        '<div class="stat-card"><div class="num">' + c.paid_personal.toLocaleString() + '</div><div class="label">Paid Personal</div></div>' +
+      '<div class="stats-title">Dataset</div>' +
+      '<div class="stats-grid">' +
+        '<div class="stat"><div class="stat-num">' + meta.total_domains.toLocaleString() + '</div><div class="stat-label">Total domains</div></div>' +
+        '<div class="stat"><div class="stat-num">' + c.disposable.toLocaleString() + '</div><div class="stat-label">Disposable</div></div>' +
+        '<div class="stat"><div class="stat-num">' + c.free.toLocaleString() + '</div><div class="stat-label">Free</div></div>' +
+        '<div class="stat"><div class="stat-num">' + c.paid_personal.toLocaleString() + '</div><div class="stat-label">Paid personal</div></div>' +
       '</div>' +
-      '<p style="text-align:center;font-size:0.82rem;color:var(--text-muted);">Last updated: ' + updated + '</p>';
+      '<div class="stats-updated">Updated ' + updated + '</div>';
   }
 
+  // Tabs
   document.querySelectorAll('.code-tab').forEach(function(tab) {
-    tab.addEventListener('click', function() {
+    tab.onclick = function() {
       document.querySelectorAll('.code-tab').forEach(function(t) { t.classList.remove('active'); });
       document.querySelectorAll('.code-body').forEach(function(p) { p.classList.remove('active'); });
       tab.classList.add('active');
       activeLang = tab.dataset.lang;
       $('panel-' + activeLang).classList.add('active');
-    });
+    };
   });
 
   updateSnippets();
 
-  async function init() {
+  (async function() {
     try {
       var resp = await fetch(DATA_URL);
       if (!resp.ok) throw new Error('HTTP ' + resp.status);
       var data = await resp.json();
-
       sets.disposable = new Set(data.domains.disposable);
       sets.free = new Set(data.domains.free);
       sets.paid_personal = new Set(data.domains.paid_personal);
-
       renderStats(data.metadata);
       updateSnippets();
-
-      $('input').addEventListener('input', function() {
-        lookup(extractDomain(this.value));
-      });
+      $('input').addEventListener('input', function() { lookup(extractDomain(this.value)); });
     } catch (e) {
-      $('stats-area').innerHTML = '<div class="error">Failed to load dataset. <br><small>' + e.message + '</small></div>';
+      $('stats-area').innerHTML = '<div class="error">Failed to load dataset.<br><small>' + e.message + '</small></div>';
     }
-  }
-
-  init();
+  })();
 })();
 </script>
 </body>
