@@ -5,18 +5,19 @@
 [![Domains](https://img.shields.io/badge/domains-148%2C000%2B-blue)](output/email_domains.json)
 [![Updated](https://img.shields.io/badge/updated-daily-brightgreen)](#-automation)
 [![License: MIT](https://img.shields.io/badge/license-MIT-yellow)](LICENSE)
+[![Live Lookup](https://img.shields.io/badge/Live_Lookup-Try_it-ff69b4)](https://rohithzr.github.io/email-provider-filter/)
 
 148,000+ email domains classified as disposable, free, or paid — updated daily, zero dependencies to consume.
 
 ## Dataset Overview
 
-**148,635 domains** across 3 categories, updated daily:
+**148,654 domains** across 3 categories, updated daily:
 
 | Category | Count | Description |
 |----------|------:|-------------|
-| Disposable | 79,842 | Temporary/throwaway email domains |
-| Free | 68,771 | Free personal email providers |
-| Paid Personal | 22 | Paid personal email services |
+| Disposable | 79,832 | Temporary/throwaway email domains |
+| Free | 68,662 | Free personal email providers |
+| Paid Personal | 160 | Paid personal email services |
 
 ## Quick Start
 
@@ -119,7 +120,7 @@ Run `python3 scripts/aggregate.py` to generate `output/source_stats.json` with p
 | all-email-providers | 6,104 | 3 | 6,101 |
 | disposable-email-domains | 5,156 | 19 | 5,137 |
 | unkn0w-disposable | 3,617 | 77 | 3,540 |
-| paid-personal | 22 | 8 | 14 |
+| paid-personal | 160 | 27 | 133 |
 | custom-disposable | 20 | 3 | 17 |
 
 *Run `python3 scripts/aggregate.py` to regenerate with latest data.*

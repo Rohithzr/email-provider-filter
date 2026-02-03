@@ -89,8 +89,9 @@ def categorize_domains() -> Tuple[Set[str], Set[str], Set[str]]:
     print("Categorizing domains...")
     free_domains = all_provider_domains - disposable_domains - paid_personal_domains - allowlist
 
-    # Remove any paid personal domains that might be in disposable lists (using allowlist logic)
+    # Remove paid personal and allowlisted domains from disposable lists
     disposable_domains -= allowlist
+    disposable_domains -= paid_personal_domains
 
     print(f"Final categorization:")
     print(f"  - Disposable: {len(disposable_domains):,} domains")

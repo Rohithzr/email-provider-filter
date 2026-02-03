@@ -1,25 +1,202 @@
 # Paid personal email providers
 # Format: domain.com
 
+# Proton Mail (Switzerland) - End-to-end encrypted, open source
 protonmail.com
+protonmail.ch
 proton.me
+pm.me
+
+# Fastmail (Australia) - Paid-only, speed-focused email
 fastmail.com
 fastmail.fm
+fastmail.net
+fastmail.org
+fastmail.co.uk
+fastmail.com.au
+fastmail.de
+fastmail.es
+fastmail.fr
+fastmail.im
+fastmail.in
+fastmail.jp
+fastmail.mx
+fastmail.nl
+fastmail.se
+fastmail.to
+fastmail.tw
+fastmail.uk
+fastmail.ca
+fastmail.cn
+fastmailbox.net
+fastmessaging.com
+fast-email.com
+fast-mail.org
+fastem.com
+fastemailer.com
+fastest.cc
+fastimap.com
+fea.st
+fmail.co.uk
+fmailbox.com
+fmgirl.com
+fmguy.com
+f-m.fm
+ftml.net
+eml.cc
+imap-mail.com
+imap.cc
+imapmail.org
+sent.as
+sent.at
+sent.com
+ml1.net
+mm.st
+myfastmail.com
+mymacmail.com
+pobox.com
+ssl-mail.com
+123mail.org
+150mail.com
+150ml.com
+16mail.com
+2-mail.com
+4email.net
+50mail.com
+airpost.net
+aliencamel.com
+allmail.net
+cluemail.com
+elitemail.org
+emailcorner.net
+emailengine.net
+emailengine.org
+emailgroups.net
+emailplus.org
+emailuser.net
+foobox.com
+foobox.net
+hailmail.net
+immerbox.com
+immermail.com
+inoutbox.com
+internet-e-mail.com
+internet-mail.org
+internetemails.net
+internetmailing.net
+jetemail.net
+justemail.net
+letterboxes.org
+lifetimeaddress.com
+mail-central.com
+mail-page.com
+mailas.com
+mailbolt.com
+mailc.net
+mailcan.com
+mailforce.net
+mailhaven.com
+mailingaddress.org
+mailite.com
+mailmight.com
+mailnew.com
+mailsent.net
+mailservice.ms
+mailup.net
+mailworks.org
+mailzone.com
+nospammail.net
+onepost.net
+ownmail.net
+penguinmail.com
+permanentmail.com
+petml.com
+postinbox.com
+postpro.net
+proinbox.com
+promessage.com
+realemail.net
+reallyfast.biz
+reallyfast.info
+rushpost.com
+siemprebox.com
+siempremail.com
+speedpost.net
+speedymail.org
+swift-mail.com
+the-fastest.net
+the-quickest.com
+theinternetemail.com
+veribox.net
+veryfast.biz
+veryspeedy.net
+warpmail.net
+xsmail.com
+yepmail.net
+your-mail.com
+
+# HEY (USA) - Basecamp's opinionated email service
 hey.com
+
+# Tuta / Tutanota (Germany) - Quantum-resistant encrypted email
 tutanota.com
 tutanota.de
 tuta.io
+tuta.com
+tutamail.com
+keemail.me
+
+# Mailfence (Belgium) - OpenPGP encrypted email
 mailfence.com
+
+# Posteo (Germany) - Green energy, anonymous registration
 posteo.de
 posteo.net
 posteo.org
+posteo.eu
+
+# Runbox (Norway) - Privacy-focused since 2000
 runbox.com
+
+# Kolab Now (Switzerland) - Open source productivity suite
 kolabnow.com
+
+# Mailbox.org (Germany) - Privacy-focused email
 mailbox.org
+
+# Soverin (Netherlands) - Budget encrypted email
 soverin.net
-ctemplar.com
+
+# StartMail (Netherlands) - PGP encrypted email
 startmail.com
+
+# CounterMail (Sweden) - Diskless servers, OpenPGP
 countermail.com
+
+# Hushmail (Canada) - One of the oldest secure email providers
+hushmail.com
+hush.com
+hush.ai
+
+# Thexyz (Canada) - Paid-only secure email
+thexyz.com
+
+# Librem Mail / Purism (USA) - Open source privacy suite
+librem.one
+
+# PrivateMail (USA) - OpenPGP encrypted email
+privatemail.com
+
+# Lavabit (USA) - DIME protocol encrypted email
+lavabit.com
+
+# MsgSafe (USA) - E2E encrypted email
+msgsafe.io
+
+# CTemplar (Iceland) - Defunct since 2022, kept for historical filtering
+ctemplar.com
+
+# Community/donation-based secure email
 riseup.net
 disroot.org
 autistici.org
